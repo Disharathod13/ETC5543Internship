@@ -43,3 +43,8 @@ sa2_age <- sa2_age %>%
 head(sa2_age)
 ```
 
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(AGEPage == 18, `3-digit level HEAP Level of Highest Educational Attainment` == "Year 12") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
