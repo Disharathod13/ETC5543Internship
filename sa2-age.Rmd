@@ -1,0 +1,45 @@
+---
+title: "SA2-age"
+author: "disha"
+date: "2024-07-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#libraries
+library(tidyverse)
+library(readr)
+```
+
+```{r}
+sa2_age <- read_csv("SA2_AGE.csv", skip = 9, col_names = TRUE, show_col_types = FALSE)
+```
+
+```{r}
+head(sa2_age)
+```
+
+
+```{r}
+# Assign column names 
+colnames(sa2_age) <- c("SA2name", "AGEPage", "IndigenousStatus", "3-digit level HEAP Level of Highest Educational Attainment", "Count")
+
+# Fill down the SA2 (UR) column
+sa2_age <- sa2_age %>%
+  fill(`SA2name`, .direction = "down")
+
+
+sa2_age <- sa2_age %>%
+  fill(`AGEPage`, .direction = "down")
+
+
+sa2_age <- sa2_age %>%
+  fill(`IndigenousStatus`, .direction = "down")
+
+head(sa2_age)
+```
+

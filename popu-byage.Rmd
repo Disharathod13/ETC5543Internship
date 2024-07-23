@@ -1,0 +1,44 @@
+---
+title: "trial"
+author: "disha"
+date: "2024-07-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+
+
+data <- read.csv("/Users/disharathod/Internship Main/2021Census_G01_VIC_SA2.csv")
+
+
+glimpse(data)
+
+```
+
+```{r}
+going_school <- sum(data$Age_psns_att_educ_inst_5_14_M, na.rm = TRUE) + sum(data$Age_psns_att_educ_inst_5_14_F, na.rm = TRUE)
+
+
+print(going_school)
+
+```
+
+```{r}
+
+totalpeoplein_5_14 <- sum(data$Age_5_14_yr_M, na.rm = TRUE) + sum(data$Age_5_14_yr_F, na.rm = TRUE)
+
+
+print(totalpeoplein_5_14)
+
+```
+
+```{r}
+totalpeoplein_5_14 - going_school
+```
+- 50388 students don't go to any educational institute in the age group of 5-14 years. 

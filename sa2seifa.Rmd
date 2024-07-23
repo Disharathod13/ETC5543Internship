@@ -1,0 +1,56 @@
+---
+title: "SA2bySEIFA"
+author: "disha"
+date: "2024-07-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(dplyr)
+seifa_data <- read_excel("SA2_SEIFA2021.xlsx")
+```
+
+
+```{r}
+seifa_data <- seifa_data %>%
+  rename(Sa2name = `2021 Statistical Area Level 2 (SA2) Name`)
+
+
+
+
+# Display the first few rows of the data
+head(seifa_data)
+
+```
+
+```{r}
+glimpse(seifa_data)
+
+```
+
+```{r}
+victorian_sa2_names <- c("Abbotsford", "Aberfeldie", "Airport West", "Albert Park", "Altona", "Altona Meadows", "Altona North", "Anglesea", "Ararat", "Arthurs Creek", "Ascot Vale", "Ashburton (Vic.)", "Ashwood - Chadstone", "Aspendale", "Aspendale Gardens - Edithvale", "Attwood - Westmeadows", "Avondale Heights", "Bacchus Marsh Region", "Bairnsdale", "Ballan", "Ballarat Central", "Ballarat East", "Ballarat North", "Ballarat South", "Balwyn", "Balwyn North", "Barwon Heads - Ocean Grove", "Bayswater (Vic.)", "Bayswater North", "Beaconsfield - Officer", "Beaumaris", "Belgrave - Selby", "Benalla", "Bendigo", "Bentleigh - McKinnon", "Bentleigh East", "Berwick - North", "Berwick - South", "Blackburn", "Blackburn North", "Blackburn South", "Black Rock - Cheltenham", "Bonnie Doon - Lake Eildon", "Boronia", "Box Hill", "Box Hill North", "Box Hill South", "Braeside", "Brimbank", "Broadmeadows", "Brunswick", "Brunswick East", "Brunswick West", "Bundoora - East", "Bundoora - North", "Bunyip - Garfield", "Burwood", "Burwood East", "Camberwell", "Canterbury (Vic.)", "Carlton", "Carlton North - Princes Hill", "Carnegie", "Carrum - Patterson Lakes", "Carrum Downs", "Castlemaine", "Caulfield - North", "Caulfield - South", "Chadstone", "Chelsea - Bonbeach", "Cheltenham - Highett (West)", "Chirnside Park", "Clayton", "Coburg", "Coburg North", "Cockatoo - Gembrook", "Colac", "Collingwood", "Coolaroo - Meadow Heights", "Corio - Norlane", "Cranbourne", "Cranbourne East", "Cranbourne North", "Cranbourne South", "Cranbourne West", "Croydon - East", "Croydon - West", "Dallas", "Dandenong", "Dandenong North", "Dandenong South", "Daylesford", "Deer Park - Derrimut", "Delacombe", "Diamond Creek", "Dingley Village", "Docklands", "Doncaster", "Doncaster East", "Donvale", "Doreen", "Drouin", "Drysdale - Clifton Springs", "East Melbourne", "Echuca", "Elsternwick", "Eltham", "Eltham North", "Elwood", "Emerald - Cockatoo", "Endeavour Hills", "Epping", "Essendon - Aberfeldie", "Essendon North", "Essendon West", "Euroa", "Fairfield - Alphington", "Ferntree Gully", "Fitzroy", "Fitzroy North", "Flemington", "Flinders", "Forest Hill", "Frankston", "Frankston North", "Frankston South", "Gardenvale - Elsternwick", "Geelong", "Geelong West - Newtown", "Gisborne - Macedon", "Glen Iris - East", "Glen Iris - West", "Glenroy - Hadfield", "Glen Waverley - East", "Glen Waverley - West", "Greensborough", "Greenvale", "Hampton", "Hampton East - Highett (East)", "Hampton Park - Lynbrook", "Hastings - Somers", "Hawthorn", "Hawthorn East", "Heidelberg - Rosanna", "Heidelberg West", "Highton", "Hoppers Crossing - North", "Hoppers Crossing - South", "Horsham", "Hughesdale", "Hume", "Huntly - Epsom", "Ivanhoe", "Ivanhoe East - Eaglemont", "Kew", "Kew East", "Keysborough", "Kilmore - Broadford", "Kinglake", "Kings Park", "Kingsville", "Knoxfield - Scoresby", "Kooyong", "Korumburra", "Kyabram", "Kyneton", "Lake Gardens", "Lakes Entrance", "Lalor", "Lara", "Laverton", "Leongatha", "Lilydale - Coldstream", "Lilydale - North", "Lilydale - South", "Lorne - Anglesea", "Lower Plenty", "Lysterfield - Rowville", "Macedon Ranges", "Malvern - East", "Malvern - West", "Mangalore", "Maribyrnong", "Maryborough", "Melton", "Melton East", "Melton South", "Melton West", "Mentone", "Mernda", "Mildura", "Mill Park", "Mitcham", "Moe - Newborough", "Moonee Ponds", "Moorabbin - Heatherton", "Mooroolbark", "Mooroolbark - South", "Mooroolbark - West", "Moyston", "Murrumbeena", "Myrtleford", "Nagambie", "Narre Warren - East", "Narre Warren - North", "Narre Warren - South", "Narre Warren - West", "Nathalia", "Newport", "Nhill", "Noble Park - East", "Noble Park - West", "North Melbourne", "Northcote", "Oakleigh", "Oakleigh East", "Oakleigh South", "Ocean Grove - Barwon Heads", "Officer", "Olinda", "Omeo", "Ormond - Glen Huntly", "Pakenham - Central", "Pakenham - South", "Pakenham - North", "Panton Hill", "Parkdale", "Park Orchards", "Pascoe Vale", "Paynesville", "Phillip Island", "Plenty - Yarrambat", "Point Cook - East", "Point Cook - West", "Port Melbourne", "Prahran - Windsor"
+)
+```
+
+```{r}
+# Filter the dataset for Victorian SA2 names
+victoria_data <- seifa_data[seifa_data$Sa2name %in% victorian_sa2_names, ]
+
+# Save the filtered data to a new dataset
+write.csv(victoria_data, "victoria_seifa_data.csv", row.names = FALSE)
+
+# Print the first few rows of the new dataset to confirm
+head(victoria_data)
+```
+
+```{r}
+glimpse(victoria_data)
+```
+
