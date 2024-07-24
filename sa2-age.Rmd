@@ -48,3 +48,72 @@ sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
 sa2_age |> filter(AGEPage == 18, `3-digit level HEAP Level of Highest Educational Attainment` == "Year 12") |> group_by(SA2name) |> summarise(Count = sum(Count))
 ```
 
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> 
+  filter(AGEPage == 17, 
+         `3-digit level HEAP Level of Highest Educational Attainment` == "Year 11") |> group_by(SA2name) |> 
+  summarise(Count = sum(Count))
+```
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(AGEPage == 16, `3-digit level HEAP Level of Highest Educational Attainment` == "Year 10") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(`3-digit level HEAP Level of Highest Educational Attainment` == "Year 12") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(`3-digit level HEAP Level of Highest Educational Attainment` == "Year 11") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+
+
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+ sa2_age |> filter(`3-digit level HEAP Level of Highest Educational Attainment` == "Year 10") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+
+
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(`3-digit level HEAP Level of Highest Educational Attainment` == "Year 9") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(AGEPage == 14, `3-digit level HEAP Level of Highest Educational Attainment` == "Not applicable") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(AGEPage == 13, `3-digit level HEAP Level of Highest Educational Attainment` == "Not applicable") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age |> filter(AGEPage == 12, `3-digit level HEAP Level of Highest Educational Attainment` == "Not applicable") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+
+```{r}
+sa2_age <- sa2_age |> mutate(Count = as.numeric(gsub(",","",Count)))
+sa2_age28 <- sa2_age |> filter(AGEPage == 11, `3-digit level HEAP Level of Highest Educational Attainment` == "Not applicable") |> group_by(SA2name) |> summarise(Count = sum(Count))
+```
+
+```{r}
+# Save the tibble to a CSV file
+write_csv(sa2_age28, "sa2_28.csv")
+
+```
