@@ -27,15 +27,21 @@ merged_data <- merged_data %>%
                values_to = "Value") %>%
   mutate(Year = as.integer(sub("X", "", Year))) 
 
+merged_data <- merged_data %>%
+  filter(SA4_NAME_2021 != "Outside Australia")
+
+
 ggplot(merged_data, aes(x = Year, y = Value, color = SA4_NAME_2021, group = SA4_NAME_2021)) +
   geom_line() +
   geom_point() +  # Add points for each year
   scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  # Ensure each year is shown separately
-  labs(title = "Yearly Trends by SA4 Region",
+  scale_y_continuous(labels = scales::comma) +  # Rescale the y-axis and add comma separator for large numbers
+  labs(title = "Yearly Trends by SA4 Region (Excluding Outside Australia)",
        x = "Year",
        y = "Value",
        color = "SA4 Region") +
   theme_minimal() +
-  facet_wrap(~ SA4_NAME_2021)  # Facet wrap by SA4_NAME
+  facet_wrap(~ SA4_NAME_2021, scales = "free_y")  # Facet wrap by SA4_NAME with independent y-scales
+
 
 
