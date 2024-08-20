@@ -14,7 +14,9 @@ complete_table <- read.csv("complete_table.csv")
 complete_table <- complete_table %>%
   mutate(sa1reg = as.numeric(sa1reg))
 
-merged_data <- left_join(complete_table, sa_regions, by = c("sa1reg" = "SA1_CODE_2021"))
+merged_data <- left_join(complete_table, 
+                         sa_regions,
+                         by = c("sa1reg" = "SA1_CODE_2021"))
 
 
 glimpse(merged_data)
@@ -30,8 +32,23 @@ merged_data <- merged_data %>%
 merged_data <- merged_data %>%
   filter(SA4_NAME_2021 != "Outside Australia")
 
+merged_data_SA4 <- merged_data |> 
+  group_by(SA4_NAME_2021, Year) |> 
+  summarise(Value = sum(Value, 
+                        na.rm = TRUE)) |> 
+  ungroup()
 
-ggplot(merged_data, aes(x = Year, y = Value, color = SA4_NAME_2021, group = SA4_NAME_2021)) +
+merged_data_total <- merged_data |> 
+  group_by(Year) |> 
+  summarise(Value = sum(Value, 
+                        na.rm = TRUE)) |> 
+  ungroup()
+
+
+merged_data_total |> 
+ggplot( aes(x = Year, y = Value
+            #, color = SA4_NAME_2021, group = SA4_NAME_2021
+            )) +
   geom_line() +
   geom_point() +  # Add points for each year
   scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  # Ensure each year is shown separately
@@ -40,8 +57,8 @@ ggplot(merged_data, aes(x = Year, y = Value, color = SA4_NAME_2021, group = SA4_
        x = "Year",
        y = "Value",
        color = "SA4 Region") +
-  theme_minimal() +
-  facet_wrap(~ SA4_NAME_2021, scales = "free_y")  # Facet wrap by SA4_NAME with independent y-scales
+  theme_minimal() 
+# +facet_wrap(~ SA4_NAME_2021, scales = "free_y")  # Facet wrap by SA4_NAME with independent y-scales
 
 
 

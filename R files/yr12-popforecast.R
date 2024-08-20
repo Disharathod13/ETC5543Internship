@@ -5,8 +5,6 @@ library(readxl)
 # Read the CSV file
 sa1_yr12 <- read_csv('sa1_edu_age 2.csv', skip = 10)
 
-# Display the dataframe
-print(sa1_popscore)
 
 # Fill down the missing values in the first two columns and rename first col
 sa1_yr12 <- sa1_yr12 %>%
