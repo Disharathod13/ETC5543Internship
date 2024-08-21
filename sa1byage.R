@@ -3,6 +3,8 @@ library(tibble)
 library(ggplot2)
 library(zoo)
 library(readxl)
+library(knitr)
+library(kableExtra)
 
 # Read the CSV file without headers and define column names manually
 sa1_age_data <- read.csv("Data/SA1_age.csv", skip = 10, header = FALSE, check.names = FALSE, row.names = NULL)
@@ -140,6 +142,17 @@ combined_data <- left_join(data_long, SAregions_AUS, by = "SA1reg")
 
 glimpse(combined_data)
 
+# Summarize the data by Year
+thetable <- combined_data %>%
+  group_by(Year) %>%
+  summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%
+  arrange(Year)  
+
+thetable
+
+# Create a table
+kable(thetable, caption = "Total Values Summarized by Year") %>%
+  kable_styling("striped", full_width = F)
 
 
 
