@@ -2,6 +2,7 @@ library(tidyverse)
 library(tibble)
 library(ggplot2)
 library(zoo)
+library(readxl)
 
 # Read the CSV file without headers and define column names manually
 sa1_age_data <- read.csv("Data/SA1_age.csv", skip = 10, header = FALSE, check.names = FALSE, row.names = NULL)
@@ -21,6 +22,13 @@ sa1_age_data <- sa1_age_data[, -ncol(sa1_age_data)]
 sa1_age_data$SA1reg[sa1_age_data$SA1reg == ""] <- NA
 sa1_age_data <- sa1_age_data %>%
   fill(SA1reg, .direction = "down")
+
+sa1_age_data <- sa1_age_data |> 
+  filter(SA1reg != 'Total')
+
+total_population <- sum(sa1_age_data$Count, na.rm = TRUE)
+total_population
+
 
 
 glimpse(sa1_age_data)
@@ -74,33 +82,65 @@ sa1_age_data_new <- sa1_age_data %>%
     )
   ) %>%
   # Calculate rolling averages for each year
-  mutate(
-    `2021` = rollmean(`2021`, k = 1, fill = NA, align = "right"),
-    `2022` = rollmean(`2022`, k = 1, fill = NA, align = "right"),
-    `2023` = rollmean(`2023`, k = 1, fill = NA, align = "right"),
-    `2024` = rollmean(`2024`, k = 1, fill = NA, align = "right"),
-    `2025` = rollmean(`2025`, k = 1, fill = NA, align = "right"),
-    `2026` = rollmean(`2026`, k = 1, fill = NA, align = "right"),
-    `2027` = rollmean(`2027`, k = 1, fill = NA, align = "right"),
-    `2028` = rollmean(`2028`, k = 1, fill = NA, align = "right"),
-    `2029` = rollmean(`2029`, k = 1, fill = NA, align = "right"),
-    `2030` = rollmean(`2030`, k = 1, fill = NA, align = "right")
-  ) %>%
-  # Group by SA1reg to calculate the totals for each region
+  # mutate(
+  #   `2021` = rollmean(`2021`, k = 1, fill = NA, align = "right"),
+  #   `2022` = rollmean(`2022`, k = 1, fill = NA, align = "right"),
+  #   `2023` = rollmean(`2023`, k = 1, fill = NA, align = "right"),
+  #   `2024` = rollmean(`2024`, k = 1, fill = NA, align = "right"),
+  #   `2025` = rollmean(`2025`, k = 1, fill = NA, align = "right"),
+  #   `2026` = rollmean(`2026`, k = 1, fill = NA, align = "right"),
+  #   `2027` = rollmean(`2027`, k = 1, fill = NA, align = "right"),
+  #   `2028` = rollmean(`2028`, k = 1, fill = NA, align = "right"),
+  #   `2029` = rollmean(`2029`, k = 1, fill = NA, align = "right"),
+  #   `2030` = rollmean(`2030`, k = 1, fill = NA, align = "right")
+  # ) %>%
+  # # Group by SA1reg to calculate the totals for each region
   group_by(SA1reg) %>%
   summarise(
-    `2021` = sum(`2021`),
-    `2022` = sum(`2022`),
-    `2023` = sum(`2023`),
-    `2024` = sum(`2024`),
-    `2025` = sum(`2025`),
-    `2026` = sum(`2026`),
-    `2027` = sum(`2027`),
-    `2028` = sum(`2028`),
-    `2029` = sum(`2029`),
-    `2030` = sum(`2030`),
+    `2021` = sum(`2021`) / 3,
+    `2022` = sum(`2022`)/ 3,
+    `2023` = sum(`2023`)/ 3,
+    `2024` = sum(`2024`)/ 3,
+    `2025` = sum(`2025`)/ 3,
+    `2026` = sum(`2026`)/ 3,
+    `2027` = sum(`2027`)/ 3,
+    `2028` = sum(`2028`)/ 3,
+    `2029` = sum(`2029`)/ 3,
+    `2030` = sum(`2030`)/ 3,
     .groups = 'drop'
   )
 
+
+sa1_age_data_new <- sa1_age_data_new |> 
+  mutate(SA1reg = as.numeric(SA1reg)) |> 
+  filter(!is.na(SA1reg))
+
+
+
 # Check the updated structure
 glimpse(sa1_age_data_new)
+
+#Pivot longer to the year and the values 
+data_long <-  sa1_age_data_new %>%
+  pivot_longer(cols = `2021`:`2030`, names_to = "Year", values_to = "Value")
+
+#Read the excel file
+SAregions_AUS <- read_excel("Data/SAregions_AUS.xlsx")
+SAregions_AUS <- SAregions_AUS |> filter(STATE_NAME_2021 == "Victoria")
+
+
+
+
+
+# If the column name in SAregions_AUS is different, rename it to match
+colnames(SAregions_AUS)[colnames(SAregions_AUS) == "SA1_CODE_2021"] <- "SA1reg"
+
+
+combined_data <- left_join(data_long, SAregions_AUS, by = "SA1reg")
+
+glimpse(combined_data)
+
+
+
+
+  
