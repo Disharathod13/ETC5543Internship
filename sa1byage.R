@@ -1,6 +1,7 @@
 library(tidyverse)
 library(tibble)
 library(ggplot2)
+library(zoo)
 
 # Read the CSV file without headers and define column names manually
 sa1_age_data <- read.csv("Data/SA1_age.csv", skip = 10, header = FALSE, check.names = FALSE, row.names = NULL)
@@ -8,7 +9,7 @@ sa1_age_data <- read.csv("Data/SA1_age.csv", skip = 10, header = FALSE, check.na
 
 
 # Define the column names
-colnames(sa1_age_data) <- c("SA1reg", "Age", "AGEP Age", "OtherColumn") 
+colnames(sa1_age_data) <- c("SA1reg", "Age", "Count", "OtherColumn") 
 
 sa1_age_data <- sa1_age_data %>%
   slice(-1)  
@@ -25,3 +26,81 @@ sa1_age_data <- sa1_age_data %>%
 glimpse(sa1_age_data)
 
 
+# First, ensure the 'Age' column is numeric
+sa1_age_data$Age <- as.numeric(sa1_age_data$Age)
+
+# Create new columns for the years 2021 to 2030
+sa1_age_data_new <- sa1_age_data %>%
+  mutate(
+    `2021` = case_when(
+      Age %in% c(17, 18, 19) ~ Count,
+      TRUE ~ 0
+    ),
+    `2022` = case_when(
+      Age %in% c(16, 17, 18) ~ Count,
+      TRUE ~ 0
+    ),
+    `2023` = case_when(
+      Age %in% c(15, 16, 17) ~ Count,
+      TRUE ~ 0
+    ),
+    `2024` = case_when(
+      Age %in% c(14, 15, 16) ~ Count,
+      TRUE ~ 0
+    ),
+    `2025` = case_when(
+      Age %in% c(13, 14, 15) ~ Count,
+      TRUE ~ 0
+    ),
+    `2026` = case_when(
+      Age %in% c(12, 13, 14) ~ Count,
+      TRUE ~ 0
+    ),
+    `2027` = case_when(
+      Age %in% c(11, 12, 13) ~ Count,
+      TRUE ~ 0
+    ),
+    `2028` = case_when(
+      Age %in% c(10, 11, 12) ~ Count,
+      TRUE ~ 0
+    ),
+    `2029` = case_when(
+      Age %in% c(9, 10, 11) ~ Count,
+      TRUE ~ 0
+    ),
+    `2030` = case_when(
+      Age %in% c(8, 9, 10) ~ Count,
+      TRUE ~ 0
+    )
+  ) %>%
+  # Calculate rolling averages for each year
+  mutate(
+    `2021` = rollmean(`2021`, k = 1, fill = NA, align = "right"),
+    `2022` = rollmean(`2022`, k = 1, fill = NA, align = "right"),
+    `2023` = rollmean(`2023`, k = 1, fill = NA, align = "right"),
+    `2024` = rollmean(`2024`, k = 1, fill = NA, align = "right"),
+    `2025` = rollmean(`2025`, k = 1, fill = NA, align = "right"),
+    `2026` = rollmean(`2026`, k = 1, fill = NA, align = "right"),
+    `2027` = rollmean(`2027`, k = 1, fill = NA, align = "right"),
+    `2028` = rollmean(`2028`, k = 1, fill = NA, align = "right"),
+    `2029` = rollmean(`2029`, k = 1, fill = NA, align = "right"),
+    `2030` = rollmean(`2030`, k = 1, fill = NA, align = "right")
+  ) %>%
+  # Group by SA1reg to calculate the totals for each region
+  group_by(SA1reg) %>%
+  summarise(
+    `2021` = sum(`2021`),
+    `2022` = sum(`2022`),
+    `2023` = sum(`2023`),
+    `2024` = sum(`2024`),
+    `2025` = sum(`2025`),
+    `2026` = sum(`2026`),
+    `2027` = sum(`2027`),
+    `2028` = sum(`2028`),
+    `2029` = sum(`2029`),
+    `2030` = sum(`2030`),
+    .groups = 'drop'
+  )
+
+# Check the updated structure
+glimpse(sa1_age_data_new)
