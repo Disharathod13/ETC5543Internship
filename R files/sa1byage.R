@@ -154,6 +154,35 @@ thetable
 kable(thetable, caption = "Total Values Summarized by Year") %>%
   kable_styling("striped", full_width = F)
 
+library(ggplot2)
+
+# Create a line graph
+ggplot(thetable, aes(x = Year, y = Total_Value)) +
+  geom_line(color = "blue", size = 1) + 
+  geom_point(color = "red", size = 2) +  
+  labs(title = "Total Values Summarized by Year",
+       x = "Year",
+       y = "Total Value") +
+  theme_minimal()  
 
 
-  
+glimpse(combined_data)
+
+
+library(ggplot2)
+
+library(ggplot2)
+
+# Create the plot with facet_wrap, line graph, and points
+ggplot(combined_data, aes(x = as.numeric(Year), y = Value, color = SA4_NAME_2021, group = SA4_NAME_2021)) +
+  geom_line() +
+  geom_point() +
+  scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  
+  scale_y_continuous(labels = scales::comma) + 
+  labs(title = "Value by Year for Each SA4 Region",
+       x = "Year",
+       y = "Value",
+       color = "SA4 Region") +
+  theme_minimal() +
+  facet_wrap(~ SA4_NAME_2021, scales = "free_y")
+
