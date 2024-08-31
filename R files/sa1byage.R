@@ -169,20 +169,57 @@ ggplot(thetable, aes(x = Year, y = Total_Value)) +
 glimpse(combined_data)
 
 
-library(ggplot2)
 
-library(ggplot2)
+
+# Summarize the data by SA4_NAME_2021 and Year
+summarized_data <- combined_data %>%
+  group_by(SA4_NAME_2021, Year) %>%
+  summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%
+  ungroup()  # Ungroup to avoid any unintended grouping issues
+
+# Convert Year to numeric in the data frame
+summarized_data <- summarized_data %>%
+  mutate(Year = as.numeric(Year))
+
+# Check the structure of the summarized data
+str(summarized_data)
 
 # Create the plot with facet_wrap, line graph, and points
-ggplot(combined_data, aes(x = as.numeric(Year), y = Value, color = SA4_NAME_2021, group = SA4_NAME_2021)) +
+ggplot(summarized_data, aes(x = Year, y = Total_Value, color = SA4_NAME_2021, group = SA4_NAME_2021)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  
   scale_y_continuous(labels = scales::comma) + 
-  labs(title = "Value by Year for Each SA4 Region",
+  labs(title = "Total Value by Year for Each SA4 Region",
        x = "Year",
-       y = "Value",
+       y = "Total Value",
        color = "SA4 Region") +
   theme_minimal() +
   facet_wrap(~ SA4_NAME_2021, scales = "free_y")
+
+percentile_invic <- read.csv("Data/SA1_rankingwstate.csv")
+
+glimpse(percentile_invic)
+
+
+
+percentile_invic <- percentile_invic %>%
+  rename(SA1reg = X2021.Statistical.Area.Level.1..SA1.) %>%
+  filter(State == "VIC")
+
+glimpse(percentile_invic)
+
+
+library(dplyr)
+
+# Perform the left join
+vicdata_new <- SAregions_AUS %>%
+  left_join(percentile_invic, by = "SA1reg") %>%
+  mutate(
+    Score = ifelse(is.na(Score), 0, Score),
+    Percentile.within.State = ifelse(is.na(Percentile.within.State), 0, Percentile.within.State)
+  )
+
+glimpse(vicdata_new)
+
 
