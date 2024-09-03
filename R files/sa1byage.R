@@ -185,7 +185,7 @@ summarized_data <- summarized_data %>%
 str(summarized_data)
 
 # Create the plot with facet_wrap, line graph, and points
-ggplot(summarized_data, aes(x = Year, y = Total_Value, color = SA4_NAME_2021, group = SA4_NAME_2021)) +
+ggplot(summarized_data, aes(x = Year, y = Total_Value)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  
@@ -213,13 +213,14 @@ glimpse(percentile_invic)
 library(dplyr)
 
 # Perform the left join
-vicdata_new <- SAregions_AUS %>%
-  left_join(percentile_invic, by = "SA1reg") %>%
-  mutate(
-    Score = ifelse(is.na(Score), 0, Score),
-    Percentile.within.State = ifelse(is.na(Percentile.within.State), 0, Percentile.within.State)
-  )
-
-glimpse(vicdata_new)
+ vicdata_new <- data_long %>%
+left_join(percentile_invic, by = "SA1reg") 
+ 
+ # Remove rows with any NA values
+ vicdata_new <- na.omit(vicdata_new)
+ 
+ # Check the cleaned dataset
+ glimpse(vicdata_new)
+ 
 
 
