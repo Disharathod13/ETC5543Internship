@@ -219,8 +219,36 @@ left_join(percentile_invic, by = "SA1reg")
  # Remove rows with any NA values
  vicdata_new <- na.omit(vicdata_new)
  
- # Check the cleaned dataset
+ library(dplyr)
+ 
+#Join the SA4_NAME_2021 column from SAregions_AUS to vicdata_new
+ vicdata_new <- vicdata_new %>%
+   left_join(SAregions_AUS %>% select(SA1reg, SA4_NAME_2021), by = "SA1reg") %>%
+   na.omit()
+ 
+ # Create a new column based on Percentile.within.State ranges
+ vicdata_new <- vicdata_new %>%
+   mutate(Percentile_Category = case_when(
+     Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
+     Percentile.within.State >= 26 & Percentile.within.State <= 50 ~ 2,
+     Percentile.within.State >= 51 & Percentile.within.State <= 75 ~ 3,
+     Percentile.within.State >= 76 & Percentile.within.State <= 100 ~ 4
+   ))
+ 
+ # Check the updated dataset
  glimpse(vicdata_new)
  
-
+ 
+ # Create the plot with facet_wrap, line graph, and points
+ ggplot(vicdata_new, aes(x = Year, y = Value, colour = SA4_NAME_2021, group = SA4_NAME_2021)) +
+   geom_line() +
+   geom_point() +
+   scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  
+   scale_y_continuous(labels = scales::comma) + 
+   labs(title = "Total Value by Year for Each SA4 Region",
+        x = "Year",
+        y = "Value",
+        color = "SA4 Region") +
+   theme_minimal() +
+   facet_wrap(~ SA4_NAME_2021, scales = "free_y")
 
