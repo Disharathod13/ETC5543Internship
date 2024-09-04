@@ -146,7 +146,8 @@ glimpse(combined_data)
 thetable <- combined_data %>%
   group_by(Year) %>%
   summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%
-  arrange(Year)  
+  arrange(Year)  |> 
+  ungroup()
 
 thetable
 
@@ -228,27 +229,32 @@ left_join(percentile_invic, by = "SA1reg")
  
  # Create a new column based on Percentile.within.State ranges
  vicdata_new <- vicdata_new %>%
-   mutate(SES_status = case_when(
+   mutate(Percentile_Category = case_when(
      Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
      Percentile.within.State >= 26 & Percentile.within.State <= 50 ~ 2,
      Percentile.within.State >= 51 & Percentile.within.State <= 75 ~ 3,
      Percentile.within.State >= 76 & Percentile.within.State <= 100 ~ 4
    ))
  
- # Check the updated dataset
+#Check the updated dataset
  glimpse(vicdata_new)
  
  
- # Summarize the data to get the cumulative sum of Values by SA4, Year, and Percentile_Category
+ 
+#Convert Year to numeric if it's not already
+ vicdata_new$Year <- as.numeric(vicdata_new$Year)
+ 
+#Summarize the data to get the cumulative sum of Values by SA4, Year, and Percentile_Category
  vicdata_cumulative <- vicdata_new %>%
    group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
-   summarise(Cumulative_Value = sum(Value)) %>%
+   summarise(Cumulative_Value = cumsum(Value)) %>%
    ungroup()
  
- # Create the faceted line graph
+#Create the faceted line graph with adjusted x-axis breaks
  ggplot(vicdata_cumulative, aes(x = Year, y = Cumulative_Value, color = factor(Percentile_Category))) +
    geom_line() +
    facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
+   scale_x_continuous(breaks = seq(2021, 2030, 1)) +
    labs(title = "Cumulative Value by Year for Each SA4 Region",
         x = "Year",
         y = "Cumulative Value",
