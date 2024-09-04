@@ -247,7 +247,7 @@ left_join(percentile_invic, by = "SA1reg")
 #Summarize the data to get the cumulative sum of Values by SA4, Year, and Percentile_Category
  vicdata_cumulative <- vicdata_new %>%
    group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
-   summarise(Cumulative_Value = cumsum(Value)) %>%
+   summarise(Cumulative_Value = sum(Value)) %>%
    ungroup()
  
 #Create the faceted line graph with adjusted x-axis breaks
