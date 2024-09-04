@@ -228,7 +228,7 @@ left_join(percentile_invic, by = "SA1reg")
  
  # Create a new column based on Percentile.within.State ranges
  vicdata_new <- vicdata_new %>%
-   mutate(Percentile_Category = case_when(
+   mutate(SES_status = case_when(
      Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
      Percentile.within.State >= 26 & Percentile.within.State <= 50 ~ 2,
      Percentile.within.State >= 51 & Percentile.within.State <= 75 ~ 3,
@@ -239,16 +239,20 @@ left_join(percentile_invic, by = "SA1reg")
  glimpse(vicdata_new)
  
  
- # Create the plot with facet_wrap, line graph, and points
- ggplot(vicdata_new, aes(x = Year, y = Value, colour = SA4_NAME_2021, group = SA4_NAME_2021)) +
+ # Summarize the data to get the cumulative sum of Values by SA4, Year, and Percentile_Category
+ vicdata_cumulative <- vicdata_new %>%
+   group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
+   summarise(Cumulative_Value = sum(Value)) %>%
+   ungroup()
+ 
+ # Create the faceted line graph
+ ggplot(vicdata_cumulative, aes(x = Year, y = Cumulative_Value, color = factor(Percentile_Category))) +
    geom_line() +
-   geom_point() +
-   scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  
-   scale_y_continuous(labels = scales::comma) + 
-   labs(title = "Total Value by Year for Each SA4 Region",
+   facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
+   labs(title = "Cumulative Value by Year for Each SA4 Region",
         x = "Year",
-        y = "Value",
-        color = "SA4 Region") +
+        y = "Cumulative Value",
+        color = "Percentile Category") +
    theme_minimal() +
-   facet_wrap(~ SA4_NAME_2021, scales = "free_y")
+   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
