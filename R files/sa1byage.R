@@ -211,7 +211,7 @@ percentile_invic <- percentile_invic %>%
 glimpse(percentile_invic)
 
 
-library(dplyr)
+
 
 # Perform the left join
  vicdata_new <- data_long %>%
@@ -261,4 +261,5 @@ left_join(percentile_invic, by = "SA1reg")
         color = "Percentile Category") +
    theme_minimal() +
    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+ 
+ 
