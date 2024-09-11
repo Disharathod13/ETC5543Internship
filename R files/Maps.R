@@ -1,6 +1,5 @@
 # Mapping SA1
 
-install.packages(c("sf", "ggplot2", "dplyr"))
 
 # Load the libraries
 library(sf)
@@ -59,3 +58,60 @@ merged_data_forsa3 <- combined_data %>%
 # Perform a left join on the datasets by matching SA1reg
 dataforsa3map <- merged_data_forsa3 %>%
   left_join(percentile_invic, by = "SA1reg")
+
+# Create a new column based on Percentile.within.State ranges
+dataforsa3map <- dataforsa3map %>%
+  mutate(Percentile_Category = case_when(
+    Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
+    Percentile.within.State >= 26 & Percentile.within.State <= 50 ~ 2,
+    Percentile.within.State >= 51 & Percentile.within.State <= 75 ~ 3,
+    Percentile.within.State >= 76 & Percentile.within.State <= 100 ~ 4
+  ))
+
+
+
+
+dataforsa3map_wide <- dataforsa3map %>%
+  pivot_wider(names_from = Year, values_from = Value)
+
+# Check the reshaped data
+glimpse(dataforsa3map_wide)
+
+
+# Select the desired columns
+dataforsa3map_new <- dataforsa3map_wide %>%
+  select(SA3_NAME_2021, Usual.Resident.Population, Percentile_Category)
+
+# Display the selected data
+glimpse(dataforsa3map_new)
+
+# Make sure the population data has SA3_CODE21
+vicdata_map_sa3 <- vicdata_map_sa3 %>%
+  mutate(SA3_NAME_2021 = SA3_NAME21) 
+
+
+
+
+sa3_combined <- vicdata_map_sa3 %>%
+  left_join(dataforsa3map_new, by = "SA3_NAME_2021")
+
+
+glimpse(sa3_combined)
+
+# Filter the data to remove rows with NA values in the population column
+sa3_combined_filtered <- sa3_combined %>%
+  filter(!is.na(Usual.Resident.Population))
+
+
+# Plot the map with a population gradient
+ggplot(data = sa3_combined_filtered) +
+  geom_sf(aes(fill = Usual.Resident.Population), color = "black") +  # Fill by population with black borders
+  scale_fill_gradient(low = "lightblue", high = "darkblue", 
+                      name = "Population", 
+                      na.value = "grey50") +  # Set color gradient and handle NA values
+  theme_minimal() +  # Use a minimal theme
+  labs(title = "SA3 Regions Colored by Population",
+       subtitle = "Population distribution across SA3 regions") +
+  coord_sf()  # Set coordinate system for spatial data
+
+

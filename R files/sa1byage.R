@@ -42,61 +42,18 @@ sa1_age_data$Age <- as.numeric(sa1_age_data$Age)
 # Create new columns for the years 2021 to 2030
 sa1_age_data_new <- sa1_age_data %>%
   mutate(
-    `2021` = case_when(
-      Age %in% c(17, 18, 19) ~ Count,
-      TRUE ~ 0
-    ),
-    `2022` = case_when(
-      Age %in% c(16, 17, 18) ~ Count,
-      TRUE ~ 0
-    ),
-    `2023` = case_when(
-      Age %in% c(15, 16, 17) ~ Count,
-      TRUE ~ 0
-    ),
-    `2024` = case_when(
-      Age %in% c(14, 15, 16) ~ Count,
-      TRUE ~ 0
-    ),
-    `2025` = case_when(
-      Age %in% c(13, 14, 15) ~ Count,
-      TRUE ~ 0
-    ),
-    `2026` = case_when(
-      Age %in% c(12, 13, 14) ~ Count,
-      TRUE ~ 0
-    ),
-    `2027` = case_when(
-      Age %in% c(11, 12, 13) ~ Count,
-      TRUE ~ 0
-    ),
-    `2028` = case_when(
-      Age %in% c(10, 11, 12) ~ Count,
-      TRUE ~ 0
-    ),
-    `2029` = case_when(
-      Age %in% c(9, 10, 11) ~ Count,
-      TRUE ~ 0
-    ),
-    `2030` = case_when(
-      Age %in% c(8, 9, 10) ~ Count,
-      TRUE ~ 0
+    `2021` = case_when(Age %in% c(17, 18, 19) ~ Count, TRUE ~ 0),
+    `2022` = case_when(Age %in% c(16, 17, 18) ~ Count, TRUE ~ 0),
+    `2023` = case_when(Age %in% c(15, 16, 17) ~ Count, TRUE ~ 0),
+    `2024` = case_when(Age %in% c(14, 15, 16) ~ Count, TRUE ~ 0),
+    `2025` = case_when(Age %in% c(13, 14, 15) ~ Count, TRUE ~ 0),
+    `2026` = case_when(Age %in% c(12, 13, 14) ~ Count, TRUE ~ 0),
+    `2027` = case_when(Age %in% c(11, 12, 13) ~ Count, TRUE ~ 0),
+    `2028` = case_when(Age %in% c(10, 11, 12) ~ Count, TRUE ~ 0),
+    `2029` = case_when(Age %in% c(9, 10, 11) ~ Count, TRUE ~ 0),
+    `2030` = case_when(Age %in% c(8, 9, 10) ~ Count, TRUE ~ 0
     )
   ) %>%
-  # Calculate rolling averages for each year
-  # mutate(
-  #   `2021` = rollmean(`2021`, k = 1, fill = NA, align = "right"),
-  #   `2022` = rollmean(`2022`, k = 1, fill = NA, align = "right"),
-  #   `2023` = rollmean(`2023`, k = 1, fill = NA, align = "right"),
-  #   `2024` = rollmean(`2024`, k = 1, fill = NA, align = "right"),
-  #   `2025` = rollmean(`2025`, k = 1, fill = NA, align = "right"),
-  #   `2026` = rollmean(`2026`, k = 1, fill = NA, align = "right"),
-  #   `2027` = rollmean(`2027`, k = 1, fill = NA, align = "right"),
-  #   `2028` = rollmean(`2028`, k = 1, fill = NA, align = "right"),
-  #   `2029` = rollmean(`2029`, k = 1, fill = NA, align = "right"),
-  #   `2030` = rollmean(`2030`, k = 1, fill = NA, align = "right")
-  # ) %>%
-  # # Group by SA1reg to calculate the totals for each region
   group_by(SA1reg) %>%
   summarise(
     `2021` = sum(`2021`) / 3,
