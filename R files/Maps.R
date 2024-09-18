@@ -38,6 +38,37 @@ ggplot(data = vicdata_map) +
   theme_minimal() +
   theme(legend.position = "bottom")
 
+
+
+
+
+
+zoom_lon_min <- 144.8  
+zoom_lon_max <- 145.15
+zoom_lat_min <- -38.0  
+zoom_lat_max <- -37.7
+
+# Coordinates for Monash University Clayton Campus
+monash_lat <- -37.9139
+monash_lon <- 145.1317
+
+
+ggplot(data = vicdata_map) +
+  geom_sf(aes(fill = as.factor(Percentile_Category))) +  
+  scale_fill_viridis_d(name = "Percentile Category") +  
+  labs(title = "SA1 Regions in Victoria by Percentile Category",
+       subtitle = "Zoomed into Central Victoria (SA1 regions)",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), 
+           ylim = c(zoom_lat_min, zoom_lat_max), 
+           expand = FALSE) +  
+  geom_point(aes(x = monash_lon, y = monash_lat), color = "red", size = 3) +  
+  geom_text(aes(x = monash_lon, y = monash_lat, label = "Monash University Clayton Campus"), 
+            hjust = 1.5, vjust = -0.5, color = "black", size = 3) + 
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
 library(ggplot2)
 
 
@@ -105,13 +136,13 @@ sa3_combined_filtered <- sa3_combined %>%
 
 # Plot the map with a population gradient
 ggplot(data = sa3_combined_filtered) +
-  geom_sf(aes(fill = Usual.Resident.Population), color = "black") +  # Fill by population with black borders
+  geom_sf(aes(fill = Usual.Resident.Population), color = "black") +  
   scale_fill_gradient(low = "lightblue", high = "darkblue", 
                       name = "Population", 
-                      na.value = "grey50") +  # Set color gradient and handle NA values
-  theme_minimal() +  # Use a minimal theme
+                      na.value = "grey50") + 
+  theme_minimal() +  
   labs(title = "SA3 Regions Colored by Population",
        subtitle = "Population distribution across SA3 regions") +
-  coord_sf()  # Set coordinate system for spatial data
+  coord_sf()  
 
 
