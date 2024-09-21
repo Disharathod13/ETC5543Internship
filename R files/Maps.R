@@ -71,78 +71,62 @@ ggplot(data = vicdata_map) +
 
 library(ggplot2)
 
+library(tidyverse)
 
-
-
+library(sf)
 
 # SA3
 
 SA3_shapefile <- st_read("/Users/disharathod/Desktop/ETC5543Internship/Data/SA3_2021_AUST_SHP_GDA2020/SA3_2021_AUST_GDA2020.shp")
 
+
+glimpse(SA3_shapefile)
+
 vicdata_map_sa3 <- SA3_shapefile %>% filter(STE_NAME21 == "Victoria")
 
-# Perform a left join on the datasets by matching SA3_NAME_2021 in combined_data with SA3_NAME21 in vicdata_map_sa3
-merged_data_forsa3 <- combined_data %>%
-  left_join(vicdata_map_sa3, by = c("SA3_NAME_2021" = "SA3_NAME21"))
-
-
-# Perform a left join on the datasets by matching SA1reg
-dataforsa3map <- merged_data_forsa3 %>%
+# Perform a left join on 'SA1reg'
+combined_data_new <- combined_data %>%
   left_join(percentile_invic, by = "SA1reg")
 
-# Create a new column based on Percentile.within.State ranges
-dataforsa3map <- dataforsa3map %>%
+vicdata_map_sa3$SA3_NAME21 <- as.character(vicdata_map_sa3$SA3_NAME21)
+combined_data_new$SA3_NAME_2021 <- as.character(combined_data_new$SA3_NAME_2021)
+
+combined_data_new <-  combined_data_new |> 
+  select(Year, Value, SA3_NAME_2021, Usual.Resident.Population, Score, Percentile.within.State) |> 
   mutate(Percentile_Category = case_when(
     Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
     Percentile.within.State >= 26 & Percentile.within.State <= 50 ~ 2,
     Percentile.within.State >= 51 & Percentile.within.State <= 75 ~ 3,
     Percentile.within.State >= 76 & Percentile.within.State <= 100 ~ 4
-  ))
-
-
-
-
-dataforsa3map_wide <- dataforsa3map %>%
+  )) |> 
   pivot_wider(names_from = Year, values_from = Value)
 
-# Check the reshaped data
-glimpse(dataforsa3map_wide)
 
 
-# Select the desired columns
-dataforsa3map_new <- dataforsa3map_wide %>%
-  select(SA3_NAME_2021, Usual.Resident.Population, Percentile_Category)
+merged_data_forsa3 <- combined_data_new %>%
+  group_by(SA3_NAME_2021) |> 
+  summarise(Usual.Resident.Population = sum(Usual.Resident.Population,  na.rm = TRUE),
+            Percentile_Category = median(Percentile_Category, na.rm = TRUE)) |> 
+  ungroup() |> 
+  left_join(vicdata_map_sa3, by = c("SA3_NAME_2021" = "SA3_NAME21"))
 
-# Display the selected data
-glimpse(dataforsa3map_new)
 
-# Make sure the population data has SA3_CODE21
-vicdata_map_sa3 <- vicdata_map_sa3 %>%
-  mutate(SA3_NAME_2021 = SA3_NAME21) 
+merged_data_forsa3 <- st_as_sf(merged_data_forsa3)
 
 
 
+library(ggplot2)
+library(viridis)  
 
-sa3_combined <- vicdata_map_sa3 %>%
-  left_join(dataforsa3map_new, by = "SA3_NAME_2021")
+# Plot the map using ggplot2
+ggplot(data = merged_data_forsa3) +
+  geom_sf(aes(fill = as.factor(Percentile_Category), geometry = geometry)) +  # geometry is now explicitly specified
+  scale_fill_viridis_d(name = "Percentile Category") +  
+  labs(title = "SA3 Regions in Victoria by Percentile Category",
+       subtitle = "Mapping Percentile Categories across Victoria",
+       caption = "Source: ABS & Custom Data") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
-
-glimpse(sa3_combined)
-
-# Filter the data to remove rows with NA values in the population column
-sa3_combined_filtered <- sa3_combined %>%
-  filter(!is.na(Usual.Resident.Population))
-
-
-# Plot the map with a population gradient
-ggplot(data = sa3_combined_filtered) +
-  geom_sf(aes(fill = Usual.Resident.Population), color = "black") +  
-  scale_fill_gradient(low = "lightblue", high = "darkblue", 
-                      name = "Population", 
-                      na.value = "grey50") + 
-  theme_minimal() +  
-  labs(title = "SA3 Regions Colored by Population",
-       subtitle = "Population distribution across SA3 regions") +
-  coord_sf()  
 
 
