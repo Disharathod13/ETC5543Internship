@@ -49,8 +49,14 @@ zoom_lat_min <- -38.0
 zoom_lat_max <- -37.7
 
 # Coordinates for Monash University Clayton Campus
-monash_lat <- -37.9139
-monash_lon <- 145.1317
+monash_lat_cl <- -37.9139
+monash_lon_cl <- 145.1317
+monash_lat_caul <- -37.8768
+monash_lon_caul <- 145.0458
+monash_lat_pen <- - 38.1527
+monash_lon_pen <- 145.1360
+monash_lat_park <- -37.7838
+monash_lon_park <- 144.9586
 
 
 ggplot(data = vicdata_map) +
@@ -130,6 +136,219 @@ ggplot(data = merged_data_forsa3) +
 
 
 
+zoom_lon_min <- 143  
+zoom_lon_max <- 146
+zoom_lat_min <- -39  
+zoom_lat_max <- -37
+
+ggplot(data = merged_data_forsa3) +
+  geom_sf(aes(fill = as.factor(Percentile_Category))) +  
+  scale_fill_viridis_d(name = "Percentile Category") +  
+  labs(title = "SA3 Regions in Victoria by Percentile Category",
+       subtitle = "Zoomed into Central Victoria (SA3 regions)",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), 
+           ylim = c(zoom_lat_min, zoom_lat_max), 
+           expand = FALSE) +  
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+## SA3 map for  2021
+
+ sa3_ses21<- vicdata_map |> 
+  filter(Percentile_Category == 1) |>      
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2021_low_ses = sum(Year_2021, na.rm = TRUE)) |> 
+  ungroup()  |> 
+   right_join(vicdata_map |> 
+                distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+   mutate(Sum_Year_2021_low_ses = ifelse(is.na(Sum_Year_2021_low_ses), 0, Sum_Year_2021_low_ses))  |> 
+   rename(SA3_NAME_2021 = SA3_NAME21)
+
+ sa3_total_21 <- vicdata_map |>     
+   group_by(SA3_NAME21) |>        
+   summarise(Sum_Year_2021 = sum(Year_2021, na.rm = TRUE)) |> 
+   ungroup()  |> 
+   right_join(vicdata_map |> 
+                distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+   mutate(Sum_Year_2021 = ifelse(is.na(Sum_Year_2021), 0, Sum_Year_2021))  |> 
+   rename(SA3_NAME_2021 = SA3_NAME21)
+ 
+sa3_ses21_map <- merged_data_forsa3 |> 
+  left_join(sa3_ses21 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))|> 
+  left_join(sa3_total_21 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
+
+### Low ses map 21
+ 
+ggplot(data = sa3_ses21_map) +
+  geom_sf(aes(fill = Sum_Year_2021_low_ses, geometry = geometry)) +  
+  labs(title = "SA3 Regions in Victoria by Year 12 population in 2021",
+       subtitle = "Low SES",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  # geom_text(aes(x = monash_lon_cl, y = monash_lat_cl, label = "Monash Clayton"), 
+            #hjust = 1.5, vjust = -0.5, color = "black", size = 2) + 
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+### Total pop map 21
+ 
+ggplot(data = sa3_ses21_map) +
+  geom_sf(aes(fill = Sum_Year_2021, geometry = geometry)) +  # geometry is now explicitly specified
+  labs(title = "SA3 Regions in Victoria by Year 12 population in 2021",
+       subtitle = "Total Population",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+## SA3 map for 2025
+
+sa3_ses25<- vicdata_map |> 
+  filter(Percentile_Category == 1) |>      
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2025_low_ses = sum(Year_2025, na.rm = TRUE)) |> 
+  ungroup()  |> 
+  right_join(vicdata_map |> 
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+  mutate(Sum_Year_2025_low_ses = ifelse(is.na(Sum_Year_2025_low_ses), 0, Sum_Year_2025_low_ses))  |> 
+  rename(SA3_NAME_2021 = SA3_NAME21)
+
+sa3_total_25 <- vicdata_map |>     
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2025 = sum(Year_2025, na.rm = TRUE)) |> 
+  ungroup()  |> 
+  right_join(vicdata_map |> 
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+  mutate(Sum_Year_2025 = ifelse(is.na(Sum_Year_2025), 0, Sum_Year_2025))  |> 
+  rename(SA3_NAME_2021 = SA3_NAME21)
+
+sa3_ses25_map <- merged_data_forsa3 |> 
+  left_join(sa3_ses25 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))|> 
+  left_join(sa3_total_25 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
+
+
+### Low ses map 25
+ggplot(data = sa3_ses25_map) +
+  geom_sf(aes(fill = Sum_Year_2025_low_ses, geometry = geometry)) + 
+  labs(title = "SA3 Regions in Victoria by Year 12 population in 2025",
+       subtitle = "Low SES",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+### Total pop map 25
+
+ggplot(data = sa3_ses25_map) +
+  geom_sf(aes(fill = Sum_Year_2025_low_ses, geometry = geometry)) +  
+  labs(title = "SA3 Regions in Victoria by Year 12 population in 2025",
+       subtitle = "Total Population",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
 
 
+## SA3 map for 2030
+
+sa3_ses30<- vicdata_map |> 
+  filter(Percentile_Category == 1) |>      
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2030_low_ses = sum(Year_2030, na.rm = TRUE)) |> 
+  ungroup()  |> 
+  right_join(vicdata_map |> 
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+  mutate(Sum_Year_2030_low_ses = ifelse(is.na(Sum_Year_2030_low_ses), 0, Sum_Year_2030_low_ses))  |> 
+  rename(SA3_NAME_2021 = SA3_NAME21)
+
+sa3_total_30 <- vicdata_map |>     
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2030 = sum(Year_2030, na.rm = TRUE)) |> 
+  ungroup()  |> 
+  right_join(vicdata_map |> 
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+  mutate(Sum_Year_2030 = ifelse(is.na(Sum_Year_2030), 0, Sum_Year_2030))  |> 
+  rename(SA3_NAME_2021 = SA3_NAME21)
+
+sa3_ses30_map <- merged_data_forsa3 |> 
+  left_join(sa3_ses30 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))|> 
+  left_join(sa3_total_30 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
+
+
+### Low ses map 30
+ggplot(data = sa3_ses30_map) +
+  geom_sf(aes(fill = Sum_Year_2030_low_ses, geometry = geometry)) + 
+  labs(title = "SA3 Regions in Victoria by Year 12 population in 2030",
+       subtitle = "Low SES",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+### Total pop map 30
+
+ggplot(data = sa3_ses30_map) +
+  geom_sf(aes(fill = Sum_Year_2030, geometry = geometry)) +  
+  labs(title = "SA3 Regions in Victoria by Year 12 population in 2030",
+       subtitle = "Total Population",
+       caption = "Source: ABS & Custom Data") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) + 
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+
+
+
+
+
+
+
+ 
