@@ -189,16 +189,22 @@ sa3_ses21_map <- merged_data_forsa3 |>
  
 ggplot(data = sa3_ses21_map) +
   geom_sf(aes(fill = Sum_Year_2021_low_ses, geometry = geometry)) +  
-  labs(title = "SA3 Regions in Victoria by Year 12 population in 2021",
-       subtitle = "Low SES",
+  labs(title = "SA3 Regions in Victoria by Socio-economic status in 2021",
+       subtitle = "SES status",
        caption = "Source: ABS & Custom Data") +
   coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
   geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
   geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
   geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
   geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
-  # geom_text(aes(x = monash_lon_cl, y = monash_lat_cl, label = "Monash Clayton"), 
-            #hjust = 1.5, vjust = -0.5, color = "black", size = 2) + 
+  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
+  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
+  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
+  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
   theme_minimal() +
   theme(legend.position = "bottom")
 
@@ -340,6 +346,14 @@ ggplot(data = sa3_ses30_map) +
   geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
   geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
   geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) + 
+  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
+  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
+  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
+  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
   theme_minimal() +
   theme(legend.position = "bottom")
 

@@ -114,14 +114,14 @@ kable(thetable, caption = "Total Values Summarized by Year") %>%
 
 library(ggplot2)
 
-# Create a line graph
-ggplot(thetable, aes(x = Year, y = Total_Value)) +
+ggplot(thetable, aes(x = Year, y = Total_Value, group = 1)) +  
   geom_line(color = "blue", size = 1) + 
   geom_point(color = "red", size = 2) +  
-  labs(title = "Total Values Summarized by Year",
+  labs(title = "The Trend for Year 12 Population",
        x = "Year",
        y = "Total Value") +
-  theme_minimal()  
+  theme_minimal()
+
 
 
 glimpse(combined_data)
