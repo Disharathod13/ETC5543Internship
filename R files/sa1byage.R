@@ -119,7 +119,7 @@ ggplot(thetable, aes(x = Year, y = Total_Value, group = 1)) +
   geom_point(color = "red", size = 2) +  
   labs(title = "The Trend for Year 12 Population",
        x = "Year",
-       y = "Total Value") +
+       y = "Total Population") +
   theme_minimal()
 
 
@@ -133,7 +133,7 @@ glimpse(combined_data)
 summarized_data <- combined_data %>%
   group_by(SA4_NAME_2021, Year) %>%
   summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%
-  ungroup()  # Ungroup to avoid any unintended grouping issues
+  ungroup()  
 
 # Convert Year to numeric in the data frame
 summarized_data <- summarized_data %>%
@@ -212,9 +212,9 @@ left_join(percentile_invic, by = "SA1reg")
    geom_line() +
    facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
    scale_x_continuous(breaks = seq(2021, 2030, 1)) +
-   labs(title = "Cumulative Value by Year for Each SA4 Region",
+   labs(title = "Population by Year for SA4 Region in VIC",
         x = "Year",
-        y = "Cumulative Value",
+        y = "Population",
         color = "Percentile Category") +
    theme_minimal() +
    theme(axis.text.x = element_text(angle = 45, hjust = 1))

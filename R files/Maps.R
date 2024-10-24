@@ -191,7 +191,10 @@ ggplot(data = sa3_ses21_map) +
   geom_sf(aes(fill = Sum_Year_2021_low_ses, geometry = geometry)) +  
   labs(title = "SA3 Regions in Victoria by Socio-economic status in 2021",
        subtitle = "SES status",
-       caption = "Source: ABS & Custom Data") +
+       caption = "Source: ABS & Custom Data",
+       x = "Latitude",  
+       y = "Longitude",
+       fill = "High to Low SES") +
   coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
   geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
   geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
@@ -212,15 +215,26 @@ ggplot(data = sa3_ses21_map) +
 ### Total pop map 21
  
 ggplot(data = sa3_ses21_map) +
-  geom_sf(aes(fill = Sum_Year_2021, geometry = geometry)) +  # geometry is now explicitly specified
+  geom_sf(aes(fill = Sum_Year_2021, geometry = geometry)) + 
   labs(title = "SA3 Regions in Victoria by Year 12 population in 2021",
        subtitle = "Total Population",
-       caption = "Source: ABS & Custom Data") +
+       caption = "Source: ABS & Custom Data",
+       x = "Latitude",  
+       y = "Longitude",
+       fill = "Population") +
   coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
   geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
   geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
   geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
   geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
+  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
+  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
+  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
   theme_minimal() +
   theme(legend.position = "bottom")
 
@@ -283,6 +297,14 @@ ggplot(data = sa3_ses25_map) +
   geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
   geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
   geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
+  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
+  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
+  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
   theme_minimal() +
   theme(legend.position = "bottom")
 
@@ -340,7 +362,10 @@ ggplot(data = sa3_ses30_map) +
   geom_sf(aes(fill = Sum_Year_2030, geometry = geometry)) +  
   labs(title = "SA3 Regions in Victoria by Year 12 population in 2030",
        subtitle = "Total Population",
-       caption = "Source: ABS & Custom Data") +
+       caption = "Source: ABS & Custom Data",
+        x = "Latitude",  
+       y = "Longitude",
+       fill = "Population") +
   coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
   geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
   geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
@@ -355,7 +380,8 @@ ggplot(data = sa3_ses30_map) +
   annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
            hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") + 
+  guides(fill = guide_colorbar(barwidth = 15, barheight = 0.5)) 
 
 
 
