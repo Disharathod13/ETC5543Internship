@@ -1,7 +1,12 @@
 ---
 title: "Final Report"
-format: html
-editor: visual
+author:
+- name: Disha Rathod
+phone: (04) 0328 1394
+email: drat0009@student.monash.edu
+organization: Data Intelligence and Insights Department of Monash
+bibliography: references.bib
+format: report-pdf
 ---
 
 # Introduction
@@ -62,9 +67,54 @@ To make the data more manageable and specific to our needs, we used the ABS Tabl
 
 We also gathered additional datasets to enrich our analysis, including data for socio-economic rankings and the locations of university campuses across Victoria. Incorporating campus locations allowed us to examine how access to higher education varies by region, helping us understand the impact of distance and proximity on Low SES students.
 
+
 ###Data Preprocessing
 
 Preparing the data for analysis was a critical step in ensuring that our results would be accurate and meaningful. We undertook a thorough data preparation process, which involved several key tasks:
+
+```{r}
+# loading the libraries
+library(tidyverse)
+library(tibble)
+library(ggplot2)
+library(zoo)
+library(readxl)
+library(sf)
+library(knitr)
+library(kableExtra)
+
+# Reading the CSV file without headers 
+sa1_age_data <- read.csv("../Data/SA1_age.csv", skip = 10, header = FALSE, check.names = FALSE, row.names = NULL)
+
+
+
+# Defining the column names
+colnames(sa1_age_data) <- c("SA1reg", "Age", "Count", "OtherColumn") 
+
+sa1_age_data <- sa1_age_data %>%
+  slice(-1)  
+
+# Remove the last column 
+sa1_age_data <- sa1_age_data[, -ncol(sa1_age_data)]
+
+# Fill down the first row values in the SA1reg column
+sa1_age_data$SA1reg[sa1_age_data$SA1reg == ""] <- NA
+sa1_age_data <- sa1_age_data %>%
+  fill(SA1reg, .direction = "down")
+
+sa1_age_data <- sa1_age_data |> 
+  filter(SA1reg != 'Total')
+
+total_population <- sum(sa1_age_data$Count, na.rm = TRUE)
+total_population
+
+
+
+
+# First, ensure the 'Age' column is numeric
+sa1_age_data$Age <- as.numeric(sa1_age_data$Age)
+
+```
 
 **Reading and Merging Datasets**:
    - The first step was to bring all the relevant datasets into R using the `tidyverse` package. This included demographic data from the ABS Census, the SES data and the Statistical Area data. Each dataset had its own structure, with some in CSV format and others in Excel. We used functions like `read.csv()` and `read_excel()` to load the data into data frames in R.
@@ -256,14 +306,23 @@ Our analysis relied heavily on a suite of software, packages, and libraries desi
    - We used RStudio, a powerful integrated development environment (IDE) for R, as our primary tool for coding, data analysis, and visualization. RStudio provided a user-friendly interface to manage the project’s complex datasets, execute scripts, and visualize results seamlessly.
 
 ### R Packages:
-**tidyverse**: This collection of R packages was fundamental to our data wrangling and manipulation efforts. Packages like `dplyr`, `tibble`, and `tidyr` were used extensively to clean, format, and merge data. [Tidyverse Documentation](https://www.tidyverse.org/)
-**sf**: For handling and visualizing geospatial data, we used the `sf` package, which enabled us to manage shapefiles and perform spatial joins. This package was crucial for creating accurate maps that displayed socio-economic trends across Victoria. [sf Documentation](https://r-spatial.github.io/sf/)
-**ggplot2**: A core part of the `tidyverse`, `ggplot2` was essential for creating data visualizations. We used it to generate line graphs, bar charts, and detailed maps that captured population projections and SES variations over time. [ggplot2 Documentation](https://ggplot2.tidyverse.org/)
-**zoo**: This package was used to manage and analyze time series data, which was particularly useful for projecting Year 12-ready populations over the 2021-2030 period. [zoo Documentation](https://cran.r-project.org/web/packages/zoo/)
-**readxl**: To import and process Excel files containing demographic and socio-economic data, we relied on the `readxl` package, which facilitated seamless integration of external datasets. [readxl Documentation](https://readxl.tidyverse.org/)
+**tidyverse**: This collection of R packages was fundamental to our data wrangling and manipulation efforts. Packages like `dplyr`, `tibble`, and `tidyr` were used extensively to clean, format, and merge data. 
+**sf**: For handling and visualizing geospatial data, we used the `sf` package, which enabled us to manage shapefiles and perform spatial joins. This package was crucial for creating accurate maps that displayed socio-economic trends across Victoria. 
+**ggplot2**: A core part of the `tidyverse`, `ggplot2` was essential for creating data visualizations. We used it to generate line graphs, bar charts, and detailed maps that captured population projections and SES variations over time. 
+**zoo**: This package was used to manage and analyze time series data, which was particularly useful for projecting Year 12-ready populations over the 2021-2030 period. 
+**readxl**: To import and process Excel files containing demographic and socio-economic data, we relied on the `readxl` package, which facilitated seamless integration of external datasets. 
 
 These tools and packages were critical to our workflow, providing the functionality and flexibility needed to handle diverse datasets and create meaningful visualizations that guided Monash University's strategy for supporting Low SES students.
 
+## Conclusion of Methodology
+
+Our methodology aimed to provide a clear and practical understanding of Year 12 population trends and socio-economic disparities across Victoria, all with the goal of supporting Monash University's mission to increase Low SES student enrollment as per government guidelines. By using a combination of data collection, preparation, and analysis, we built a strong foundation to explore the factors influencing educational access.
+
+We started by gathering data from trusted sources, such as the 2021 Census, ensuring that the information was accurate and relevant. Merging and cleaning the data was a crucial step, as it allowed us to create a consistent and reliable dataset. Using R and its powerful tools, like `tidyverse` and `sf`, we were able to manage and analyze complex datasets efficiently. This mix of statistical and geospatial analysis brought the data to life, showing Monash not just the raw numbers but the broader patterns and regional differences behind them.
+
+Our forecasting method was straightforward but effective, projecting Year 12-ready populations up to 2030 using a three-year averaging technique. Although we faced challenges, like varying data quality and the need for standardization, we addressed them by using flexible tools in R that allowed us to adapt as new information emerged. 
+
+In the end, our methodology provided Monash with valuable insights into where they can make the most impact. It highlighted areas that would benefit from targeted support, helping the university allocate resources more effectively. This approach not only painted a detailed picture of the current educational landscape but also set the stage for future efforts to make education more inclusive and accessible for all students in Victoria.
 
 # Results 
 
