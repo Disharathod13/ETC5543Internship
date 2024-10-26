@@ -1,10 +1,6 @@
 # Mapping SA1
 
 
-# Load the libraries
-library(sf)
-library(ggplot2)
-library(dplyr)
 
 
 # Read the shapefile 

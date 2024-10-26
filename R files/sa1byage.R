@@ -91,7 +91,7 @@ SAregions_AUS <- SAregions_AUS |> filter(STATE_NAME_2021 == "Victoria")
 
 
 
-# If the column name in SAregions_AUS is different, rename it to match
+# The column name in SAregions_AUS is different, rename it 
 colnames(SAregions_AUS)[colnames(SAregions_AUS) == "SA1_CODE_2021"] <- "SA1reg"
 
 
@@ -112,7 +112,7 @@ thetable
 kable(thetable, caption = "Total Values Summarized by Year") %>%
   kable_styling("striped", full_width = F)
 
-library(ggplot2)
+
 
 ggplot(thetable, aes(x = Year, y = Total_Value, group = 1)) +  
   geom_line(color = "blue", size = 1) + 
@@ -201,14 +201,14 @@ left_join(percentile_invic, by = "SA1reg")
 #Convert Year to numeric if it's not already
  vicdata_new$Year <- as.numeric(vicdata_new$Year)
  
-#Summarize the data to get the cumulative sum of Values by SA4, Year, and Percentile_Category
- vicdata_cumulative <- vicdata_new %>%
+#Summarize the data to get the sum of Values by SA4, Year, and Percentile_Category
+ vicdata_sum <- vicdata_new %>%
    group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
    summarise(Cumulative_Value = sum(Value)) %>%
    ungroup()
  
 #Create the faceted line graph with adjusted x-axis breaks
- ggplot(vicdata_cumulative, aes(x = Year, y = Cumulative_Value, color = factor(Percentile_Category))) +
+ ggplot(vicdata_sum, aes(x = Year, y = Cumulative_Value, color = factor(Percentile_Category))) +
    geom_line() +
    facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
    scale_x_continuous(breaks = seq(2021, 2030, 1)) +
