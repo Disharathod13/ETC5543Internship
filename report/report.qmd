@@ -59,18 +59,16 @@ Overall, our methodology was about more than just crunching numbers; it was abou
 
 ###Data Sources
 
-The backbone of this project was the data provided by the 2021 Census from the Australian Bureau of Statistics (ABS). This data was invaluable in helping me understand the population distribution and socio-economic factors in Victoria, particularly focusing on students who are likely to be Year 12 graduates in the coming years. By looking at the age demographics and socio-economic indicators from the census, we could identify which areas were likely to have higher or lower socio-economic advantages. SEIFA methodology was the key that helpes us in defining these SES status.
+The backbone of this project was the data sourced from the 2021 Census conducted by the Australian Bureau of Statistics (ABS). This data was essential in understanding the demographic distribution and socio-economic factors across Victoria, specifically focusing on students likely to become Year 12 graduates in the coming years. By examining the age demographics and socio-economic indicators provided by the census, we were able to identify which regions had higher or lower socio-economic advantages. This was critical for categorizing socio-economic status (SES) using SEIFA (Socio-Economic Indexes for Areas) methodology.
 
-We used data from three geographical levels: Statistical Area 1 (SA1), Statistical Area 3 (SA3) and Statistical Area 4 (SA4). SA1 data gave us a detailed, view, allowing us to pinpoint local trends and disparities, while the broader SA3 and SA4 levels helped us capture regional patterns. This multi-level approach provided a clear picture of how socio-economic conditions varied across the state, identifying both the most disadvantaged areas and those with greater opportunities. 
+We utilized data from three geographical levels—Statistical Area 1 (SA1), Statistical Area 3 (SA3), and Statistical Area 4 (SA4). SA1 provided a detailed view, highlighting localized trends and disparities, while SA3 and SA4 gave us a broader regional perspective. This multi-level approach was crucial for capturing both localized and state-wide patterns, allowing us to identify areas of disadvantage or opportunity accurately.
 
-To make the data more manageable and specific to our needs, we used the ABS Table Builder, a powerful tool that allowed us to create custom datasets. Table Builder helped us focus on the Year 12-ready age group and the socio-economic factors that are relevant to understanding educational access. This customization was crucial because the ABS data covers a vast range of topics, and we needed to narrow it down to the most relevant information for our analysis.
-
-We also gathered additional datasets to enrich our analysis, including data for socio-economic rankings and the locations of university campuses across Victoria. Incorporating campus locations allowed us to examine how access to higher education varies by region, helping us understand the impact of distance and proximity on Low SES students.
+To streamline the data and focus specifically on Year 12 readiness, we used the ABS Table Builder. This tool allowed us to create custom datasets that concentrated on the age groups relevant to our study and narrowed down the socio-economic factors affecting educational access. Additionally, we incorporated data on university campus locations to understand how accessibility might vary by region, offering insights into the potential impact of distance and proximity on Low SES students.
 
 
 ###Data Preprocessing
 
-Preparing the data for analysis was a critical step in ensuring that our results would be accurate and meaningful. We undertook a thorough data preparation process, which involved several key tasks:
+Preparing the data for analysis was a critical step, ensuring accuracy and relevance for our projections. Here are the main tasks we undertook:
 
 ```{r}
 # loading the libraries
@@ -253,174 +251,86 @@ left_join(percentile_invic, by = "SA1reg")
 
 
 **Reading and Merging Datasets**:
-   - The first step was to bring all the relevant datasets into R using the `tidyverse` package. This included demographic data from the ABS Census, the SES data and the Statistical Area data. Each dataset had its own structure, with some in CSV format and others in Excel. We used functions like `read.csv()` and `read_excel()` to load the data into data frames in R.
-   - Merging these datasets was a significant task. Since the data came from different sources, each had its own unique identifiers and formats. We used `left_join()` and `inner_join()` from the `dplyr` package to match records using geographical codes like SA1, SA3 and SA4 identifiers. This merging allowed us to integrate the three datasets into a single, comprehensive dataset.
+   - We began by importing data from multiple sources using read.csv() and read_excel() from the tidyverse package. Each dataset had distinct structures, with some in CSV format and others in Excel. We cleaned these datasets to maintain consistency.
+Merging the datasets was an intricate task because they used different identifiers. We performed joins using left_join() from the dplyr package, matching data based on geographical codes such as SA1, SA3, and SA4. This step allowed us to create a unified dataset necessary for further analysis.
 
 **Handling Missing Data**:
-   - Missing data is a common challenge in any analysis, and our project was no exception. Some areas, especially those with really low population,had to be removed using the `filter()` function. This was particularly important in ensuring that the analysis was not skewed by unreliable data. 
-   - Also, some of the data had gap with the first variable having multiple values in the second variable. To address this, we used the `fill()` function in `tidyverse`. This method ensured that missing values were logically estimated based on nearby data, maintaining the continuity of trends.
+   - Missing data can skew results, so it was essential to handle any gaps in our datasets. We removed regions with unreliable data using the filter() function and addressed missing values with fill() to maintain data continuity, ensuring logical estimates for gaps.
+Some datasets contained blank entries for certain regions, particularly those with sparse populations. These were filtered out to avoid inaccuracies in our analysis.
 
 **Formatting Age Categories for Projections**:
-   - A key focus of our analysis was to project the Year 12 graduates population from 2021 to 2030. This required a precise organization of age data, as we needed to account for how each age group would transition year by year. To do this, we grouped age data into three-year segments (e.g., 17, 18, and 19-year-olds for 2021) and calculated averages to make predictions for 2021, and used rolling averages for the following years. 
-   - Example: Years 16,17 and 18 were taken into consideration for 2022 Year 12 graduate forecast from the 2021 census data and 15, 16 and 17 were taken for 2023. 
-   - Using R’s `mutate()` and `case_when()` functions, we created new columns that captured these transitions over time. This allowed us to project how the demographics would shift year by year, giving us a clear forecast of the Year 12 population. By structuring the data in this way, we were able to make consistent and reliable projections across the decade.
+   - A key element of our analysis was projecting the Year 12-ready population for each year from 2021 to 2030. This involved grouping the age data into three-year segments, such as 17, 18, and 19-year-olds for 2021 projections. We used mutate() and case_when() to create these new variables, enabling us to track changes year-by-year.
+Rolling averages were calculated using group_by() and summarise() to forecast future demographics, helping smooth out any annual fluctuations.
 
 **Data Cleaning and Standardization**:
-   - Data from different sources often comes in varying formats, so a thorough cleaning was necessary. This involved standardizing column names, aligning geographical codes, and converting text-based age groups into numerical categories using `as.numeric()`. Ensuring consistency was crucial for performing accurate calculations and comparisons.
-   -We addressed discrepancies in region names by using `rename()` to standardize labels across datasets, ensuring consistency during merging and analysis.
+   - Different datasets often had varying formats, so we cleaned and standardized them to ensure consistency. This included aligning column names, geographic codes, and converting text-based age categories to numeric using as.numeric(). These steps were critical for performing accurate calculations.
 
 **Geospatial Data Preparation**:
-   - Since a large part of our analysis focused on mapping socio-economic trends, preparing the geospatial data was a major task. We used the `sf` package to handle spatial data and imported shapefiles that contained the geographical boundaries for Victoria’s SA1 and SA3 regions. These shapefiles allowed us to link the data directly to specific locations.
-   - Spatial joins were conducted to attach demographic information to these geographical areas, enabling us to create visual representations of the data. We used coordinate transformations to ensure that the spatial data aligned perfectly with the demographic datasets, allowing us to produce accurate and detailed maps.
+   - Since much of our analysis relied on visualizing socio-economic trends, we utilized the sf package to handle geospatial data. Shapefiles defining Victoria's Statistical Areas were imported, allowing us to map the data accurately.
+We performed spatial joins using st_join() to link demographic information with geographic areas. Transformations using st_transform() ensured that all data layers matched spatially, maintaining alignment for accurate visualizations.
 
 **Challenges in Data Preparation**:
-   - One of the biggest challenges we faced was aligning data from multiple sources. The ABS Census, SES indicators, and campus data were collected at different times and with slightly different methodologies. This meant that certain definitions and boundaries needed to be reconciled. For example, one dataset had more SA1 regions, which we had to remove when joining with the SES data, because those extra SA1 regions has incomplete data or very low population. 
-   - Merging data from various geographical levels (SA1 and SA3) presented another challenge. The detailed SA1 data is excellent for pinpointing local trends, but coverage can be inconsistent in sparsely populated areas. So, we had to aggregate data to the SA3 level to get a clearer picture of the underlying trends. This aggregation sometimes required recalculating averages and ensuring that the results remained accurate.
-
-Through careful data collection, meticulous preparation, and a focus on accuracy, we created a robust dataset that served as the foundation for our analysis. This allowed us to confidently move forward with forecasting, visualizing, and drawing insights, knowing that our data was both reliable and comprehensive.
+   - A significant challenge was aligning data collected from different periods and formats. We faced inconsistencies between datasets, particularly in the SES and campus location information, which required careful reconciliation. Using rename() helped standardize inconsistent identifiers, while left_join() enabled precise matching across datasets.
+Aggregating data from smaller (SA1) to larger (SA3) areas was necessary in regions with incomplete coverage. This aggregation required recalculating averages while preserving regional patterns to ensure our analysis remained accurate.
 
 ## Forecasting Methodology
 
 We projected the Year 12-ready population in Victoria from 2021 to 2030 to support Monash University's Low SES enrollment goals using demographic data and R.
 
-### Population Projection Approach
+To estimate the future Year 12 graduate population, we used age data from the 2021 Census and employed a straightforward averaging technique. The method involved averaging three consecutive age groups to create stable projections. For example, we used the 17, 18, and 19-year-olds to forecast the Year 12-ready population in 2021. For 2022, we adjusted the groups to include 16, 17, and 18-year-olds, continuing this method through to 2030. This rolling average approach smoothed out yearly fluctuations, offering a clearer view of long-term trends without being overly sensitive to annual variations.
 
-To estimate the future Year 12 graduate population, we used age data from the 2021 Census and employed a simple averaging method. For each forecast year, we averaged three age groups to get a reliable projection. For example, to determine the Year 12 graduate population in 2021, we looked at 17, 18, and 19-year-olds. For 2022, we averaged 16, 17, and 18-year-olds, and continued this pattern up to 2030. This technique helped us smooth out any year-to-year variations, ensuring a more stable and accurate projection.
-
-The decision to use three-year averages was intentional, it allowed us to account for natural fluctuations in age groups without overemphasizing any particular year’s anomalies. This method balances detail with simplicity, making it easier to track long-term trends without getting lost in minor yearly changes.
+The choice to use three-year averages was deliberate, aiming to maintain a balance between detail and simplicity. This technique allowed us to capture natural shifts in age demographics without letting outlier years overly influence the forecasts.
 
 ### How R Was Used for Forecasting
 
-R was the backbone of our statistical analysis, and its flexibility allowed us to handle complex data manipulation with ease. We relied heavily on R’s data wrangling capabilities to prepare and forecast the Year 12-ready population. Here's how we approached the task:
-
-**Structuring Data for Analysis**:
-   - We used the `tidyverse` package in R to import and clean demographic data, using `mutate()` and `case_when()` to create projection columns for each year.
-   - For example, the `case_when()` function allowed us to categorize and modify data based on specific conditions. This was crucial for shifting the focus from one age group to another as we moved through each forecast year.
-
- **Managing Regional Differences**:
-   - Since our analysis focused on various regions within Victoria, we grouped the data by geographical areas such as Statistical Area 1 (SA1) and Statistical Area 3 (SA3). This ensured that our forecasts reflected local trends, not just general state-wide averages. Grouping data by region allowed us to identify which areas might meet enrollment targets and which might need additional support.
+R played a crucial role in our statistical analysis, offering flexibility and efficiency in data manipulation. We used the `tidyverse` package for data cleaning, structuring, and forecasting. Demographic data was imported with `read.csv()` and refined using `mutate()` and `case_when()`, enabling us to categorize age groups by forecast year easily. This streamlined approach facilitated adjustments to projections and quick insights into demographic trends. Our analysis was regional, focusing on Victoria's Statistical Areas (SA1 and SA3), ensuring forecasts were grounded in local conditions rather than broad state averages. This regional focus allowed us to identify specific areas needing greater support, aligning with Monash University's goals of increasing Low SES student enrollment. The ability to iterate projections and modify parameters seamlessly in R ensured that our analysis could respond to changing data, making it a vital tool in the project's forecasting methodology.
 
 
 ### Assumptions and Limitations
+Our forecasting methodology relied on several assumptions, which also presented limitations. We assumed stable trends in factors like birth rates and migration, which works well for short-term projections but could miss the impact of sudden socio-economic shifts. The three-year averaging method we employed captured broader patterns effectively, yet it might overlook rapid changes, such as spikes or dips in birth rates. Additionally, our model assumed that students would consistently progress through the education system, without accounting for unexpected dropout rates or shifts in educational policy that could alter projections. The accuracy of our forecasts was heavily dependent on the quality of the 2021 Census data; any inaccuracies in this source could influence our results. Despite these constraints, using R allowed for flexibility in the analysis, enabling real-time data adjustments that made our forecasts more adaptable to emerging trends, while maintaining transparency in the approach.
 
-As with any forecasting project, our approach relied on several key assumptions that helped guide the analysis but also highlighted certain limitations:
+### Geospatial Data Preparation
 
-**Stable Demographic Trends**:
-   - We assumed that the factors like birth rates and migration to stay consistent without significant disruptions. While this assumption is generally safe for short-term projections, unexpected events—like economic changes or new policies—could alter these patterns.
-
-**Three-Year Averaging**:
-   - The decision to average across three age groups was made to smooth out any yearly fluctuations in the population data. However, this method also means that any sudden demographic changes, like a spike or drop in birth rates, might not be fully captured in the projections. 
-
-**Cohort Stability**:
-   - Our projections assumed that students would generally progress through the education system in a consistent manner. This does not account for unexpected factors like changes in dropout rates or new education policies, which could affect the accuracy of our predictions.
-
-**Data Quality**:
-   - The accuracy of our forecasts depends heavily on the quality of the 2021 Census data. We took steps to clean and validate the data, but any inconsistencies or gaps in the original dataset could impact our results. Additionally, socio-economic indicators can evolve over time, which could affect long-term predictions if local dynamics shift significantly.
-
-By acknowledging these assumptions, we aimed to maintain a transparent and realistic view of what our forecasting could and couldn’t achieve. Despite the challenges, the use of R enabled us to adapt and make adjustments as needed, allowing for a flexible approach to demographic forecasting. This methodology gave us a solid foundation to predict future trends and support Monash’s mission to make higher education more inclusive and accessible for students from all backgrounds.
-
-
-## Geospatial Data Preparation
-
-Mapping socio-economic trends across Victoria was a crucial part of our analysis, as it provided a clear picture of regional differences in population and socio-economic status. This step was essential to understand which areas had the highest concentration of Year 12 graduate students and how access to Monash's campus varied by location. To achieve this, we needed to work with geospatial data, ensuring it was accurately aligned with our demographic and socio-economic information. 
-
-### Using the `sf` Package and Shapefiles
-
-We used the `sf` package in R to handle spatial data, starting with shapefiles that defined Victoria’s Statistical Areas (SA1 for neighborhoods and SA3 for larger regions). We imported these into R with `st_read()`, ensuring the geographic data was accurate, as any errors could affect the entire analysis.
-
-### Merging Spatial and Demographic Data
-
-Once we had the geographic boundaries set, we needed to connect them with the demographic data and SES data. This was done through a process called spatial joining, which links data to specific areas based on their location on the map. Using the `st_join()` function in R, we merged the census data with the boundaries of SA1 and SA3 regions. This allowed us to visualize things like socio-economic categories and population densities directly on the map.
-
-One of the trickiest parts was making sure that all the datasets used the same coordinate system. Sometimes, different data sources use different ways to define locations, so we had to standardize everything to a common system using `st_transform()`. This step ensured that all the data matched up properly, preventing any errors in how regions were displayed on the maps.
+Mapping socio-economic trends was essential to understanding Victoria’s educational landscape, highlighting disparities in population and socio-economic conditions. Using the `sf` package, we conducted geospatial analysis by importing shapefiles that defined Victoria’s Statistical Areas—SA1 for detailed regions and SA3 for broader areas. This enabled us to overlay demographic data onto geographic boundaries accurately. Spatial joins using `st_join()` were crucial, linking demographic data to specific locations for precise visualization of trends. To maintain consistency across datasets, we standardized coordinate systems with `st_transform()`, ensuring accurate alignment. This combination of demographic and spatial data provided a visual representation of regional disparities, making it easier to pinpoint areas needing additional support. The geospatial insights revealed how socio-economic factors varied across Victoria, offering a comprehensive understanding of the areas most in need of educational resources.
 
 ### Creating Maps and Visualizations
 
-With the spatial data ready and merged with our demographic information, we could start creating visualizations. We used `ggplot2`, a powerful plotting tool in R, to generate maps that highlighted key trends across Victoria:
+Using the merged spatial data, we utilized `ggplot2` to create detailed visualizations that highlighted key educational trends in Victoria. These included maps showing socio-economic conditions, population densities, and proximity to university campuses. Mapping Socio-Economic Status (SES) categories revealed areas with greater barriers to accessing education, guiding targeted interventions. Additionally, demographic density overlays pinpointed regions with high Year 12-ready populations, identifying potential focus areas for boosting university enrollment. These visualizations provided a comprehensive view of the challenges faced by Low SES students and helped inform strategies to make education more accessible.
 
-**Socio-Economic Status (SES) Categories**:
-   - We mapped the SES categories to see which areas were more or less advantaged. This helped us identify the regions where students might face greater challenges accessing higher education.
-   
-**Population Densities**:
-   - By overlaying demographic data on the map, we could visualize population densities. This made it easier to spot areas with a high concentration of Year 12 graduate students, highlighting potential focus areas for increasing university enrollment.
-   
-**Proximity to Campuses**:
-   - One of our key goals was to see how close students from Low SES backgrounds were to Monash University campuses. Using the spatial data, we were able to create visualizations that showed which regions had better access and which might benefit from additional facilities or support.
 
-### Challenges in Geospatial Data Preparation
-
-We faced challenges ensuring census data aligned with shapefile boundaries, especially in rural areas with sparse data. To maintain accuracy, we aggregated data from SA1 to SA3 regions. Each step required careful validation to ensure accuracy, avoiding errors in visualizations. In the end, the geospatial data allowed us to clearly visualize Victoria’s socio-economic landscape, guiding Monash University in targeting support for Low SES students.
 
 ## Data Analysis and Diagnostics
 
-Our analysis examined Year 12 population trends in Victoria, focusing on socio-economic status (SES) variations. This helped identify patterns to support Monash University's Low SES enrollment goals, using R’s data tools to summarize trends, categorize regions, and ensure data reliability.
+Our analysis of Year 12 population trends in Victoria was centered around understanding socio-economic differences, specifically to aid Monash University's strategy for increasing Low SES enrollments. Using R, we processed and summarized data to identify key patterns, ensuring data accuracy and reliability throughout.
 
-### Data Analysis
+To get a clear picture, we used `group_by()` in R to segment data by regions and socio-economic status (SES), allowing us to highlight areas with higher concentrations of Low SES students. This information was crucial for pinpointing regions that might need additional outreach and support. To further clarify these patterns, we created SES categories by dividing regions into percentile groups based on their socio-economic rankings. This approach helped visualize the disparities more effectively, showing how socio-economic factors impact access to education.
 
-**Summarizing Year 12 Population Trends by Region and SES**
+To ensure the accuracy of our findings, we carried out validation checks by cross-referencing with historical census records and comparing trends across different levels, such as SA1 (local) and SA3 (regional). This step was vital to confirm that local observations were consistent with broader state-wide trends. However, our analysis did have limitations. We focused only on Victoria, which meant that comparisons with other states weren’t included. Additionally, we assumed that demographic trends would remain stable, and our data heavily relied on the quality of the 2021 Census, which may have gaps.
 
-   We analyzed Year 12 graduate distribution in Victoria by grouping data at the SA1 and SA3 levels, focusing on 17, 18, and 19-year-olds. Using `group_by()` in R, we segmented data by region and SES, identifying areas with high concentrations of Low SES students that might need targeted support.
+Despite these limitations, we continuously adjusted and validated our forecasts to provide Monash University with reliable insights, ensuring their strategies for supporting Low SES students are well-informed and effective in promoting a more equitable educational environment.
 
-**Creating SES Categories with Percentile Groups**
-
-   To make the socio-economic differences clearer, we divided regions into percentile groups based on their SES ranking. This categorization helped us compare areas within Victoria, ranging from the most disadvantaged to the most advantaged. We used R’s `mutate()` function to create these SES categories, which grouped each region into percentile ranges from the bottom 25% to the top 25%. This step was crucial for our visualizations, as it allowed us to map socio-economic disparities across the state, highlighting regions that might struggle to meet enrollment goals.
-
-**Techniques for Grouping and Summarizing Data**
-
-   We used grouping and summarizing techniques to analyze the data. The `group_by()` function in R allowed us to segment information by region, year, and SES category, and the `summarize()` function calculated averages, medians, and totals. This helped track Year 12 population changes over time across regions. Additionally, the `mutate()` function created new variables to capture trends, aiding in forecasting and assessing regional performance relative to Monash University's enrollment targets.
    
+## Skills, Challenges, and Innovative Approaches
 
-### Diagnostics and Robustness**
+This project required the application of a broad set of technical skills to effectively manage, analyze, and visualize socio-economic and demographic data for Victoria. The goal was to support Monash University in increasing Low SES enrollment by understanding Year 12 population trends and socio-economic disparities across the state. Using R as our primary tool, we were able to draw valuable insights from the data.
 
-**Ensuring Data Reliability**
+A significant portion of the project involved data wrangling, a critical step in preparing raw datasets for analysis. The data from the Australian Bureau of Statistics (ABS) included various demographic and socio-economic indicators that were not immediately suitable for analysis. Using R’s `tidyverse` package, we undertook a meticulous process of cleaning and standardizing the data. This included converting text-based data to numerical formats, aligning regional identifiers, and addressing inconsistencies across datasets. One of the biggest challenges was merging multiple data sources, each structured differently. For example, combining demographic data, socio-economic indicators, and geographic information required careful handling of format discrepancies. We relied heavily on R’s merging tools, such as `left_join()` and `inner_join()`, to integrate diverse datasets seamlessly. This effort ensured that our analysis had a solid foundation, free from data inconsistencies.
 
-   To ensure data accuracy, we built several validation checks, including cross-referencing with previous census records to catch errors early. We also compared data across different geographical levels—both SA1 (local) and SA3 (regional)—to confirm that local trends aligned with broader patterns. Any discrepancies were investigated to maintain reliability, ensuring our conclusions were robust and free from isolated anomalies.
-   
-**Limitations in the Analysis**
+Understanding the regional differences in Victoria required a detailed geospatial analysis. We used R’s `sf` package, which specializes in handling spatial data, to manage the geographical aspects of the project. The analysis involved working with Statistical Areas—SA1 for detailed local data and SA3 for broader regions—ensuring our findings were both specific and comprehensive. By importing shapefiles that outlined these areas, we were able to overlay demographic data onto geographic boundaries, visualizing socio-economic trends across the state. One challenge we faced was aligning datasets with varying coordinate systems. To ensure accuracy, we utilized functions like `st_transform()` to standardize coordinate references, enabling a consistent mapping process. Additionally, we conducted spatial joins with `st_join()` to precisely link demographic data with geographic regions, ensuring that each data point accurately corresponded to its location.
 
-   While our analysis was thorough, it had limitations. We focused only on Victoria, a comparatively wealthy state, without national comparisons. Projections assumed stable government policies, but changes in funding or incentives could impact outcomes. Migration trends were also assumed to be steady, though shifts could alter projections. Additionally, our analysis depended on the accuracy of 2021 Census data, with any inaccuracies potentially affecting results, and socio-economic status can change over time, influencing stability.
+Another key aspect of our analysis was forecasting the Year 12-ready population from 2021 to 2030. This step was crucial for understanding future trends and anticipating areas where Monash University might need to focus its resources. We utilized R’s data manipulation capabilities, particularly the `mutate()` and `case_when()` functions, to structure age groups and project them into future years. These tools allowed us to flexibly adjust age groups year by year and average across three age groups to create reliable projections. The challenge here was accounting for potential shifts in demographic patterns, such as changes in birth rates or migration trends. To manage this, we frequently validated our projections by cross-referencing with existing data, refining our models to account for any emerging nuances.
 
-**Addressing the Challenges**
+Presenting complex data in a clear and accessible way was an essential part of our project. Using R’s `ggplot2` package, we created a variety of visualizations that combined demographic, socio-economic, and geographic data. These visualizations included bar charts, line graphs, and detailed maps that illustrated key trends. For example, maps showing socio-economic status (SES) categories highlighted regions with the greatest educational challenges, while demographic density overlays pinpointed areas with high Year 12-ready populations. These visual tools made it easier to communicate our findings, helping Monash University to quickly identify focus areas for their Low SES strategy.
 
-   To address limitations, we used R’s flexible tools, like `mutate()` and `case_when()`, to adjust for regional patterns and handle missing data. We validated forecasts against available data and continuously updated our methods to adapt to changing socio-economic conditions. This approach ensured our analysis remained relevant, providing a clear picture of where support is needed to improve educational access for disadvantaged students. Our findings will guide Monash University in supporting Low SES students, fostering a more equitable education system.
-   
+Integrating multiple datasets with diverse structures and scales was one of the most significant challenges we encountered. We had to standardize region names, formats, and coordinate systems to ensure that all data sources aligned properly. This often required manual adjustments to reconcile discrepancies. In rural areas, where data coverage was sometimes sparse, we aggregated information from smaller SA1 areas to broader SA3 regions to maintain a balance between specificity and reliability. The forecasting component also posed challenges, as it required stable demographic trends to make accurate predictions. We continuously validated our projections, refining them to account for local variations and the inherent uncertainty in long-term forecasts. Balancing the simplicity of our models with the complexity of the data was a constant effort, ensuring that our insights remained both realistic and useful.
 
-## Conceptual and Methodological Complexity
+Our analysis incorporated several innovative approaches that enhanced the clarity and effectiveness of our findings. One novel aspect of our methodology was the use of percentile categories to represent SES regions. By categorizing Victoria’s regions into percentile groups, we were able to standardize how we visualized socio-economic disparities. This approach made it easier to compare different areas, highlighting regions that were more disadvantaged and those that were relatively advantaged. It provided a clear, intuitive way to understand the socio-economic landscape, allowing Monash University to focus on areas that needed the most support.
 
-### Skills and Learning
+Another unique strength of the project was the combination of statistical analysis with geospatial visualization. While statistical tools provided the numerical insights, mapping these data points gave them real-world context. This dual approach revealed how socio-economic and demographic factors interacted across Victoria, offering a comprehensive view of educational challenges. The ability to visualize patterns geographically added depth to our analysis, making it easier to communicate complex trends.
 
-This project involved applying a variety of technical skills, which allowed us to dive deep into the data and extract valuable insights:
+The project’s methodology was also designed to be adaptive, using R’s flexible tools to accommodate new data and unexpected trends. Functions like `mutate()` and `case_when()` allowed us to make quick adjustments and respond to changing variables. This adaptability ensured that our analysis remained relevant, providing Monash with the most up-to-date insights for supporting Low SES students. By building flexibility into our analysis, we were able to refine our recommendations continuously, aligning them with Monash’s evolving needs.
 
-**Data Wrangling**:
-   - We spent a lot of time cleaning and preparing data, a process known as data wrangling. The raw datasets from the Australian Bureau of Statistics (ABS) were not immediately ready for analysis—they required extensive cleaning to ensure accuracy and consistency. Using R’s `tidyverse` package, we standardized formats, converted text to numbers, aligned regional identifiers, and dealt with missing or inconsistent data.
-   - One of the biggest challenges was integrating multiple datasets that were structured differently. We had to bring together demographic data, socio-economic information, and spatial data, making sure they all lined up correctly. This meant carefully handling any discrepancies in formats and using R’s powerful merging tools to stitch the data together.
-
-**Geospatial Analysis**:
-   - Mapping data was key to understanding regional differences in Victoria. We used the `sf` package in R to manage spatial data, like SA1 and SA3 boundaries, creating maps that highlighted demographic trends and SES categories. Aligning datasets was challenging, but we resolved this by transforming coordinate systems and performing spatial joins. Working with geospatial data required a mix of technical skills and creativity to ensure maps were accurate and visually clear.
-   
-**Forecasting Year 12 Populations**:
-   - We forecasted the Year 12-ready population using demographic trends, applying R’s `case_when()` function for flexible adjustments. Forecasting was challenging, as it required accounting for migration and socio-economic changes. We validated projections regularly by cross-checking with existing data to ensure reliability.
-
-**Data Visualization**:
-   - Presenting complex data in a clear and accessible way was essential. We used `ggplot2` in R to create a series of visualizations that combined demographic and geospatial data. This included bar charts, line graphs, and detailed maps that made it easy to interpret trends. 
-
-### Challenges Faced During the Analysis
-
-Handling complex datasets was a significant challenge as we integrated diverse demographic, socio-economic, and spatial data, each with different structures and scales. This required careful standardization of region names, formats, and coordinate systems, often involving manual adjustments to ensure everything aligned accurately. In regions with incomplete data—particularly rural areas—we aggregated information from smaller SA1 areas to broader SA3 regions to maintain a balance between specificity and coverage. Merging data from different sources also required harmonizing definitions and resolutions, using R’s data manipulation tools to ensure consistency. Forecasting the Year 12-ready population added another layer of complexity, as it involved assumptions about stable demographic trends while accounting for local nuances. We continuously validated our projections, refining the models to maintain accuracy, and balanced the simplicity of the forecast with the inherent complexity of the data, ensuring that our insights were both realistic and useful.
-
-### Innovation and Novelty
-
-We employed several innovative methods to make the analysis clearer and more effective:
-
-**Using Percentile Categories for SES Regions**:
-   - A unique aspect of our approach was categorizing Victoria’s regions into SES percentile groups. This allowed us to standardize how we looked at socio-economic disparities, making it easy to compare different areas. By dividing regions into percentile groups, we could clearly see which areas were most disadvantaged and which were more advantaged.These categories made our maps more intuitive.
-
-**Combining Statistical and Geospatial Analysis**:
-   - Combining statistical analysis with geospatial visualization was a key strength of the project. Statistical analysis provided the data, while mapping gave it real-world context, revealing how socio-economic and demographic factors varied across the state. 
-
-**Adaptive and Flexible Analysis**:
-   - Our methodology was flexible, using R’s tools like `mutate()` and `case_when()` to adapt to new data and unexpected trends. This adaptability made our analysis robust, ensuring insights stayed relevant and allowed us to provide up-to-date recommendations for Monash University.
-
+Overall, the project’s approach combined rigorous technical analysis with innovative visualization techniques to deliver actionable insights, guiding Monash University’s strategy for fostering a more inclusive educational environment across Victoria.
 
 ## Discussion of Limitations and Data Issues
 
@@ -430,9 +340,6 @@ While our analysis provided valuable insights into Year 12 population trends and
 
 One of the main limitations of our analysis was the lack of detailed socio-economic data. While SEIFA rankings gave a helpful overview, they grouped regions based on factors that might have hid local differences. For example, a low SES area might still have some wealthier pockets that the data didn’t show. Additionally, the SES data relied on the 2021 Census, offering a snapshot of socio-economic conditions at that time. However, these conditions can shift rapidly due to changes in local economies, policies, or unexpected events like pandemics, meaning our analysis might not reflect recent socio-economic changes that could impact Year 12 graduates. The forecasting methods also introduced limitations. Projections assumed stable demographic trends over the decade, which may not hold if migration patterns shift, government policies change, or socio-economic landscapes transform. By averaging age groups to estimate future Year 12 populations, we captured broader trends but risked missing sudden local fluctuations. Integrating multiple datasets also posed challenges, with each source having different structures and formats. Standardizing data required extensive cleaning, especially when region names didn’t match perfectly. Handling missing data, often aggregating smaller regions (SA1) into larger ones (SA3), sacrificing some detail for consistency. 
 
-### Future Improvements
-
-Future work could be standardizing data formats across datasets would also enhance consistency, making regional comparisons more accurate. Incorporating dynamic, real-time data sources, like economic trends or migration patterns, would provide a more current understanding of changing conditions, making projections more adaptable and reliable. These improvements would help Monash University make better-informed, data-driven decisions to support Low SES students.
 
 ## Software and Tools
 
@@ -450,17 +357,9 @@ Our analysis relied heavily on a suite of software, packages, and libraries desi
 
 These tools and packages were critical to our workflow, providing the functionality and flexibility needed to handle diverse datasets and create meaningful visualizations that guided Monash University's strategy for supporting Low SES students.
 
-## Conclusion of Methodology
 
-Our methodology aimed to provide a clear and practical understanding of Year 12 population trends and socio-economic disparities across Victoria, all with the goal of supporting Monash University's mission to increase Low SES student enrollment as per government guidelines. By using a combination of data collection, preparation, and analysis, we built a strong foundation to explore the factors influencing educational access.
+# Results and Discussion
 
-We started by gathering data from trusted sources, such as the 2021 Census, ensuring that the information was accurate and relevant. Merging and cleaning the data was a crucial step, as it allowed us to create a consistent and reliable dataset. Using R and its powerful tools, like `tidyverse` and `sf`, we were able to manage and analyze complex datasets efficiently. This mix of statistical and geospatial analysis brought the data to life, showing Monash not just the raw numbers but the broader patterns and regional differences behind them.
-
-Our forecasting method was straightforward but effective, projecting Year 12-ready populations up to 2030 using a three-year averaging technique. Although we faced challenges, like varying data quality and the need for standardization, we addressed them by using flexible tools in R that allowed us to adapt as new information emerged. 
-
-In the end, our methodology provided Monash with valuable insights into where they can make the most impact. It highlighted areas that would benefit from targeted support, helping the university allocate resources more effectively. This approach not only painted a detailed picture of the current educational landscape but also set the stage for future efforts to make education more inclusive and accessible for all students in Victoria.
-
-# Results 
 
 # Future work
 
