@@ -218,7 +218,6 @@ left_join(percentile_invic, by = "SA1reg")
  # Remove rows with any NA values
  vicdata_new <- na.omit(vicdata_new)
  
- library(dplyr)
  
 #Join the SA4_NAME_2021 column from SAregions_AUS to vicdata_new
  vicdata_new <- vicdata_new %>%
@@ -360,6 +359,191 @@ These tools and packages were critical to our workflow, providing the functional
 
 # Results and Discussion
 
+## The line graph for the projections made for Year 12 population in Victoria
+
+```{r}
+ggplot(thetable, aes(x = Year, y = Total_Value, group = 1)) +  
+  geom_line(color = "blue", size = 1) + 
+  geom_point(color = "red", size = 2) +  
+  labs(title = "The Trend for Year 12 Population",
+       x = "Year",
+       y = "Total Population") +
+  theme_minimal()
+```
+
+
+## The projection of the population values forecasted for each SA4 region in Victoria 
+
+```{r}
+# Create the plot with facet_wrap, line graph, and points
+ggplot(summarized_data, aes(x = Year, y = Total_Value)) +
+  geom_line() +
+  geom_point() +
+  scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  
+  scale_y_continuous(labels = scales::comma) + 
+  labs(title = "Total Value by Year for Each SA4 Region",
+       x = "Year",
+       y = "Total Value",
+       color = "SA4 Region") +
+  theme_minimal() +
+  facet_wrap(~ SA4_NAME_2021, scales = "free_y")
+```
+
+
+## Trend for each Percentile Category in every SA4 region in Victoria (Red = LowSES)
+
+```{r}
+ggplot(vicdata_sum, aes(x = Year, y = Sum_Value, color = factor(Percentile_Category))) +
+   geom_line() +
+   facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
+   scale_x_continuous(breaks = seq(2021, 2030, 1)) +
+   labs(title = "Population by Year for SA4 Region in VIC",
+        x = "Year",
+        y = "Population",
+        color = "Percentile Category") +
+   theme_minimal() +
+   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ 
+```
+
+
+## Tha SES map of 2021 (Socio Economic status of regions in central part of Victoria for SA3)
+```{r}
+# Processing the map data
+vic_sa1_shapefile <- st_read("../Data/SA1_2021_AUST_GDA2020.shp")
+
+
+vicdata_map <- vic_sa1_shapefile %>% filter(STE_NAME21 == "Victoria")
+
+
+
+
+vicdata_wide <- vicdata_new %>%
+  pivot_wider(names_from = Year, values_from = Value, names_prefix = "Year_")
+
+# Convert SA1reg from double to character
+vicdata_wide <- vicdata_wide %>%
+  mutate(SA1reg = as.character(SA1reg))
+
+
+vicdata_map <- vicdata_map %>%
+left_join(vicdata_wide, by = c("SA1_CODE21" = "SA1reg"))
+
+SA3_shapefile <- st_read("../Data/SA3_2021_AUST_SHP_GDA2020/SA3_2021_AUST_GDA2020.shp")
+
+
+glimpse(SA3_shapefile)
+
+vicdata_map_sa3 <- SA3_shapefile %>% filter(STE_NAME21 == "Victoria")
+
+# Perform a left join on 'SA1reg'
+combined_data_new <- combined_data %>%
+  left_join(percentile_invic, by = "SA1reg")
+
+vicdata_map_sa3$SA3_NAME21 <- as.character(vicdata_map_sa3$SA3_NAME21)
+combined_data_new$SA3_NAME_2021 <- as.character(combined_data_new$SA3_NAME_2021)
+
+combined_data_new <-  combined_data_new |> 
+  select(Year, Value, SA3_NAME_2021, Usual.Resident.Population, Score, Percentile.within.State) |> 
+  mutate(Percentile_Category = case_when(
+    Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
+    Percentile.within.State >= 26 & Percentile.within.State <= 50 ~ 2,
+    Percentile.within.State >= 51 & Percentile.within.State <= 75 ~ 3,
+    Percentile.within.State >= 76 & Percentile.within.State <= 100 ~ 4
+  )) |> 
+  pivot_wider(names_from = Year, values_from = Value)
+
+
+
+merged_data_forsa3 <- combined_data_new %>%
+  group_by(SA3_NAME_2021) |> 
+  summarise(Usual.Resident.Population = sum(Usual.Resident.Population,  na.rm = TRUE),
+            Percentile_Category = median(Percentile_Category, na.rm = TRUE)) |> 
+  ungroup() |> 
+  left_join(vicdata_map_sa3, by = c("SA3_NAME_2021" = "SA3_NAME21"))
+
+
+merged_data_forsa3 <- st_as_sf(merged_data_forsa3)
+```
+
+
+
+```{r}
+
+# Zoom-in the map
+zoom_lon_min <- 143  
+zoom_lon_max <- 146
+zoom_lat_min <- -39.0  
+zoom_lat_max <- -37
+
+# Coordinates for Monash University Campuses
+monash_lat_cl <- -37.9139
+monash_lon_cl <- 145.1317
+monash_lat_caul <- -37.8768
+monash_lon_caul <- 145.0458
+monash_lat_pen <- - 38.1527
+monash_lon_pen <- 145.1360
+monash_lat_park <- -37.7838
+monash_lon_park <- 144.9586
+
+# SA3 map for 2021
+
+ sa3_ses21<- vicdata_map |> 
+  filter(Percentile_Category == 1) |>      
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2021_low_ses = sum(Year_2021, na.rm = TRUE)) |> 
+  ungroup()  |> 
+   right_join(vicdata_map |> 
+                distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+   mutate(Sum_Year_2021_low_ses = ifelse(is.na(Sum_Year_2021_low_ses), 0, Sum_Year_2021_low_ses))  |> 
+   rename(SA3_NAME_2021 = SA3_NAME21)
+ 
+ sa3_total_21 <- vicdata_map |>     
+   group_by(SA3_NAME21) |>        
+   summarise(Sum_Year_2021 = sum(Year_2021, na.rm = TRUE)) |> 
+   ungroup()  |> 
+   right_join(vicdata_map |> 
+                distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+   mutate(Sum_Year_2021 = ifelse(is.na(Sum_Year_2021), 0, Sum_Year_2021))  |> 
+   rename(SA3_NAME_2021 = SA3_NAME21)
+ 
+sa3_ses21_map <- merged_data_forsa3 |> 
+  left_join(sa3_ses21 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))|> 
+  left_join(sa3_total_21 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
+
+# Plotting the map
+
+ggplot(data = sa3_ses21_map) +
+  geom_sf(aes(fill = Sum_Year_2021_low_ses, geometry = geometry)) +  
+  labs(title = "SA3 Regions in Victoria by Socio-economic status in 2021",
+       subtitle = "SES status",
+       caption = "Source: ABS & Custom Data",
+       x = "Latitude",  
+       y = "Longitude",
+       fill = "High to Low SES") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
+  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
+  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
+  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
+  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+```
 
 # Future work
 

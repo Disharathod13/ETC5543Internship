@@ -204,11 +204,11 @@ left_join(percentile_invic, by = "SA1reg")
 #Summarize the data to get the sum of Values by SA4, Year, and Percentile_Category
  vicdata_sum <- vicdata_new %>%
    group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
-   summarise(Cumulative_Value = sum(Value)) %>%
+   summarise(Sum_Value = sum(Value)) %>%
    ungroup()
  
 #Create the faceted line graph with adjusted x-axis breaks
- ggplot(vicdata_sum, aes(x = Year, y = Cumulative_Value, color = factor(Percentile_Category))) +
+ ggplot(vicdata_sum, aes(x = Year, y = Sum_Value, color = factor(Percentile_Category))) +
    geom_line() +
    facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
    scale_x_continuous(breaks = seq(2021, 2030, 1)) +
