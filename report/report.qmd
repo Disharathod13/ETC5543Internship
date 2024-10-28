@@ -99,7 +99,7 @@ library(kableExtra)
 # 'header = FALSE' indicates there are no headers in the CSV file
 # 'check.names = FALSE' prevents automatic correction of column names
 # 'row.names = NULL' avoids assigning any column as row names
-sa1_age_data <- read.csv(
+demographic_data_by_age <- read.csv(
   "../Data/SA1_age.csv",
   skip = 10,
   header = FALSE,
@@ -108,35 +108,35 @@ sa1_age_data <- read.csv(
 )
 
 # Defining the column names manually, as the original file doesn't have headers
-colnames(sa1_age_data) <- c("SA1reg", "Age", "Count", "OtherColumn") 
+colnames(demographic_data_by_age) <- c("SA1reg", "Age", "Count", "OtherColumn") 
 
 # Removing the first row, which may contain unwanted data
-sa1_age_data <- sa1_age_data %>%
+demographic_data_by_age <- demographic_data_by_age %>%
   slice(-1)
 
 # Remove the last column since it's not needed for analysis
-sa1_age_data <- sa1_age_data[, -ncol(sa1_age_data)]
+demographic_data_by_age <- demographic_data_by_age[, -ncol(demographic_data_by_age)]
 
 # Fill down the first row values in the 'SA1reg' column
 # This step handles missing 'SA1reg' entries by filling down previous values
-sa1_age_data$SA1reg[sa1_age_data$SA1reg == ""] <- NA
-sa1_age_data <- sa1_age_data %>%
+demographic_data_by_age$SA1reg[demographic_data_by_age$SA1reg == ""] <- NA
+demographic_data_by_age <- demographic_data_by_age %>%
   fill(SA1reg, .direction = "down")
 
 # Removing rows with 'Total' in 'SA1reg' column as it represents aggregate data
-sa1_age_data <- sa1_age_data |>
+demographic_data_by_age <- demographic_data_by_age |>
   filter(SA1reg != 'Total')
 
 # Calculating the total population count from the 'Count' column
 # Use 'na.rm = TRUE' to ignore any missing values
-total_population <- sum(sa1_age_data$Count, na.rm = TRUE)
+total_population <- sum(demographic_data_by_age$Count, na.rm = TRUE)
 
 # Ensure the 'Age' column is numeric for further calculations
-sa1_age_data$Age <- as.numeric(sa1_age_data$Age)
+demographic_data_by_age$Age <- as.numeric(demographic_data_by_age$Age)
 
 # Creating new columns for each year from 2021 to 2030
 # Each year aggregates counts for specific age groups relevant for projections
-sa1_age_data_new <- sa1_age_data %>%
+demographic_data_by_age_new <- demographic_data_by_age %>%
   mutate(
     `2021` = case_when(Age %in% c(17, 18, 19) ~ Count, TRUE ~ 0),
     # Ages 17-19 for 2021
@@ -184,13 +184,13 @@ sa1_age_data_new <- sa1_age_data %>%
   )
 
 # Convert 'SA1reg' column to numeric and filter out any rows with missing values
-sa1_age_data_new <- sa1_age_data_new |>
+demographic_data_by_age_new <- demographic_data_by_age_new |>
   mutate(SA1reg = as.numeric(SA1reg)) |>
   filter(!is.na(SA1reg))
 
 # Pivot the data longer for analysis or visualization
 # Columns from '2021' to '2030' will be gathered into a 'Year' column with their values in a 'Value' column
-data_long <- sa1_age_data_new %>%
+population_projection_long <- demographic_data_by_age_new %>%
   pivot_longer(cols = `2021`:`2030`,
                names_to = "Year",
                values_to = "Value")
@@ -214,19 +214,19 @@ SAregions_AUS <- SAregions_AUS |> filter(STATE_NAME_2021 == "Victoria")
 colnames(SAregions_AUS)[colnames(SAregions_AUS) == "SA1_CODE_2021"] <- "SA1reg"
 
 # Combine the demographic data with regional data using a left join on the 'SA1reg' column
-# 'data_long' contains population information, and 'SAregions_AUS' contains region information
-combined_data <- left_join(data_long, SAregions_AUS, by = "SA1reg")
+# 'population_projection_long' contains population information, and 'SAregions_AUS' contains region information
+regional_population_summary <- left_join(population_projection_long, SAregions_AUS, by = "SA1reg")
 
 # Summarize the combined data by 'Year', aggregating total values
 # The result is a summary table with total values for each year
-thetable <- combined_data %>%
+yearly_population_summary <- regional_population_summary %>%
   group_by(Year) %>%
   summarize(Population = sum(Value, na.rm = TRUE)) %>% # Sum up the values, ignoring NAs
   arrange(Year) |>  # Sort by year for clarity
   ungroup()          # Remove the grouping
 
 # Create a styled table to display summarized yearly data
-kable(thetable |> head()) %>%
+kable(yearly_population_summary |> head()) %>%
   kable_styling(latex_options = c("striped"))
 ```
 
@@ -237,17 +237,17 @@ In @tbl-the-table, we can see the projected values for Year 12 graduate populati
 #| tbl-cap: Summarized Year 12 Population values by SA4 Region and Year
 # Further summarization: Group data by 'SA4_NAME_2021' and 'Year'
 # This helps in understanding trends at the SA4 (Statistical Area Level 4) region level
-summarized_data <- combined_data %>%
+yearly_sa4_population <- regional_population_summary %>%
   group_by(SA4_NAME_2021, Year) %>%
   summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%  # Sum up values for each region and year
   ungroup()  # Remove the grouping to simplify further operations
 
 # Ensure the 'Year' column is numeric for plotting or further numerical analysis
-summarized_data <- summarized_data %>%
+yearly_sa4_population <- yearly_sa4_population %>%
   mutate(Year = as.numeric(Year))
 
-# Check the structure of 'summarized_data' to confirm the data types and structure are as expected
-summarized_data %>%
+# Check the structure of 'yearly_sa4_population' to confirm the data types and structure are as expected
+yearly_sa4_population %>%
   arrange(SA4_NAME_2021, Year) %>%  # Arrange data by region and year for better readability
   head() %>%
   kable(
@@ -266,39 +266,39 @@ In @tbl-sa4-summarise, I have taken the projected Year 12 population values ever
 
 ```{r percent-aus}
 # Reading SA1 data of whole Australia
-percentile_invic <- read.csv("../Data/SA1_rankingwstate.csv")
-glimpse(percentile_invic)
+vic_percentile_data <- read.csv("../Data/SA1_rankingwstate.csv")
+glimpse(vic_percentile_data)
 ```
 
 This dataset gives us the SES status defining variables in detail for each SA1 region in whole of Australia. 
 
 ```{r percent-in-vic}
 # Filtering SA1 of only Victoria
-percentile_invic <- percentile_invic %>%
+vic_percentile_data <- vic_percentile_data %>%
   rename(SA1reg = X2021.Statistical.Area.Level.1..SA1.) %>%
   filter(State == "VIC")
 
-glimpse(percentile_invic)
+glimpse(vic_percentile_data)
 ```
 
 Here, we have filtered only the SA1 regions in Victoria, as we are only focusing on VIC for our project. 
 
 ```{r combine-sa4}
 # Perform the left join
-vicdata_new <- data_long %>%
-  left_join(percentile_invic, by = "SA1reg")
+victoria_population_analysis <- population_projection_long %>%
+  left_join(vic_percentile_data, by = "SA1reg")
 
 # Remove rows with any NA values
-vicdata_new <- na.omit(vicdata_new)
+victoria_population_analysis <- na.omit(victoria_population_analysis)
 
 
-# Join the SA4_NAME_2021 column from SAregions_AUS to vicdata_new
-vicdata_new <- vicdata_new %>%
+# Join the SA4_NAME_2021 column from SAregions_AUS to victoria_population_analysis
+victoria_population_analysis <- victoria_population_analysis %>%
   left_join(SAregions_AUS %>% select(SA1reg, SA4_NAME_2021), by = "SA1reg") %>%
   na.omit()
 
 # Create a new column based on Percentile.within.State ranges
-vicdata_new <- vicdata_new %>%
+victoria_population_analysis <- victoria_population_analysis %>%
   mutate(
     Percentile_Category = case_when(
       Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
@@ -312,13 +312,13 @@ vicdata_new <- vicdata_new %>%
   )
  
 # Check the updated dataset
-glimpse(vicdata_new)
+glimpse(victoria_population_analysis)
  
 # Convert Year to numeric if it's not already
-vicdata_new$Year <- as.numeric(vicdata_new$Year)
+victoria_population_analysis$Year <- as.numeric(victoria_population_analysis$Year)
  
 # Summarize the data to get the sum of Values by SA4, Year, and Percentile_Category
-vicdata_sum <- vicdata_new %>%
+population_by_sa4_and_ses <- victoria_population_analysis %>%
   group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
   summarise(Sum_Value = sum(Value)) %>%
   ungroup()
@@ -437,7 +437,7 @@ These tools and packages were critical to our workflow, providing the functional
 ```{r projection}
 #| label: fig-year-trend
 #| fig-cap: The Trend for Year 12 Population
-ggplot(thetable, aes(x = Year, y = Population, group = 1)) +
+ggplot(yearly_population_summary, aes(x = Year, y = Population, group = 1)) +
   geom_line(color = "blue", size = 1) +
   geom_point(color = "red", size = 2) +
   labs(title = "The Trend for Year 12 Population", x = "Year", y = "Total Population") +
@@ -461,7 +461,7 @@ The projection helps inform strategic planning, allowing targeted outreach effor
 #| label: fig-sa4-proj
 #| fig-cap: Total Value by Year for Each SA4 Region in Victoria (2021-2030)
 # Create the plot with facet_wrap, line graph, and points
-ggplot(summarized_data, aes(x = Year, y = Total_Value)) +
+ggplot(yearly_sa4_population, aes(x = Year, y = Total_Value)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = seq(2021, 2030, by = 1)) +  
@@ -486,7 +486,7 @@ The @fig-sa4-proj directly aligns with the project's objectives of understanding
 ```{r trend-sa4}
 #| label: fig-sa4-trend
 #| fig-cap: Yearly Population Trends by SA4 Region and Percentile Category in Victoria (2021-2030)
-ggplot(vicdata_sum, aes(
+ggplot(population_by_sa4_and_ses, aes(
   x = Year,
   y = Sum_Value,
   color = factor(Percentile_Category)
@@ -514,9 +514,9 @@ The Melbourne North-west (closer to our campuses) and North West have an upwqard
 # Processing the map data
 vic_sa1_shapefile <- st_read("../Data/SA1_2021_AUST_GDA2020.shp", quiet = TRUE)
 
-vicdata_map <- vic_sa1_shapefile %>% filter(STE_NAME21 == "Victoria")
+sa1_shapefile_data <- vic_sa1_shapefile %>% filter(STE_NAME21 == "Victoria")
 
-vicdata_wide <- vicdata_new %>%
+vicdata_wide <- victoria_population_analysis %>%
   pivot_wider(names_from = Year,
               values_from = Value,
               names_prefix = "Year_")
@@ -526,21 +526,21 @@ vicdata_wide <- vicdata_wide %>%
   mutate(SA1reg = as.character(SA1reg))
 
 
-vicdata_map <- vicdata_map %>%
+sa1_shapefile_data <- sa1_shapefile_data %>%
 left_join(vicdata_wide, by = c("SA1_CODE21" = "SA1reg"))
 
 SA3_shapefile <- st_read("../Data/SA3_2021_AUST_SHP_GDA2020/SA3_2021_AUST_GDA2020.shp", quiet = TRUE)
 
-vicdata_map_sa3 <- SA3_shapefile %>% filter(STE_NAME21 == "Victoria")
+sa3_shapefile_data <- SA3_shapefile %>% filter(STE_NAME21 == "Victoria")
 
 # Perform a left join on 'SA1reg'
-combined_data_new <- combined_data %>%
-  left_join(percentile_invic, by = "SA1reg")
+regional_population_summary_new <- regional_population_summary %>%
+  left_join(vic_percentile_data, by = "SA1reg")
 
-vicdata_map_sa3$SA3_NAME21 <- as.character(vicdata_map_sa3$SA3_NAME21)
-combined_data_new$SA3_NAME_2021 <- as.character(combined_data_new$SA3_NAME_2021)
+sa3_shapefile_data$SA3_NAME21 <- as.character(sa3_shapefile_data$SA3_NAME21)
+regional_population_summary_new$SA3_NAME_2021 <- as.character(regional_population_summary_new$SA3_NAME_2021)
 
-combined_data_new <-  combined_data_new |> 
+regional_population_summary_new <-  regional_population_summary_new |> 
   select(Year, Value, SA3_NAME_2021, Usual.Resident.Population, Score, Percentile.within.State) |> 
   mutate(Percentile_Category = case_when(
     Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
@@ -552,14 +552,14 @@ combined_data_new <-  combined_data_new |>
 
 
 
-merged_data_forsa3 <- combined_data_new %>%
+sa3_population_ses_combined <- regional_population_summary_new %>%
   group_by(SA3_NAME_2021) |> 
   summarise(Usual.Resident.Population = sum(Usual.Resident.Population,  na.rm = TRUE),
             Percentile_Category = median(Percentile_Category, na.rm = TRUE)) |> 
   ungroup() |> 
-  left_join(vicdata_map_sa3, by = c("SA3_NAME_2021" = "SA3_NAME21"))
+  left_join(sa3_shapefile_data, by = c("SA3_NAME_2021" = "SA3_NAME21"))
 
-merged_data_forsa3 <- st_as_sf(merged_data_forsa3)
+sa3_population_ses_combined <- st_as_sf(sa3_population_ses_combined)
 ```
 
 
@@ -584,39 +584,39 @@ monash_lat_park <- -37.7838
 monash_lon_park <- 144.9586
 
 # SA3 map for 2021
-sa3_ses21 <- vicdata_map |>
+low_ses_sa3_2021 <- sa1_shapefile_data |>
   filter(Percentile_Category == 1) |>
   group_by(SA3_NAME21) |>
   summarise(Sum_Year_2021_low_ses = sum(Year_2021, na.rm = TRUE)) |>
   ungroup()  |>
-  right_join(vicdata_map |>
+  right_join(sa1_shapefile_data |>
                distinct(SA3_NAME21), by = "SA3_NAME21") |>
   mutate(Sum_Year_2021_low_ses = ifelse(is.na(Sum_Year_2021_low_ses), 0, Sum_Year_2021_low_ses))  |>
   rename(SA3_NAME_2021 = SA3_NAME21)
 
-sa3_total_21 <- vicdata_map |>
+total_population_sa3_2021 <- sa1_shapefile_data |>
   group_by(SA3_NAME21) |>
   summarise(Sum_Year_2021 = sum(Year_2021, na.rm = TRUE)) |>
   ungroup()  |>
-  right_join(vicdata_map |>
+  right_join(sa1_shapefile_data |>
                distinct(SA3_NAME21), by = "SA3_NAME21") |>
   mutate(Sum_Year_2021 = ifelse(is.na(Sum_Year_2021), 0, Sum_Year_2021))  |>
   rename(SA3_NAME_2021 = SA3_NAME21)
  
-sa3_ses21_map <- merged_data_forsa3 |>
-  left_join(sa3_ses21 |>
+low_ses_sa3_2021_map <- sa3_population_ses_combined |>
+  left_join(low_ses_sa3_2021 |>
               tibble() |>
               select(-geometry)
             ,
             by = c("SA3_NAME_2021" = "SA3_NAME_2021")) |>
-  left_join(sa3_total_21 |>
+  left_join(total_population_sa3_2021 |>
               tibble() |>
               select(-geometry)
             ,
             by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
 
 # Plotting the map
-ggplot(data = sa3_ses21_map) +
+ggplot(data = low_ses_sa3_2021_map) +
   geom_sf(aes(fill = Sum_Year_2021_low_ses, geometry = geometry)) +
   labs(
     title = "SA3 Regions in Victoria by Socio-economic status in 2021",
@@ -700,26 +700,26 @@ The @fig-ses-sa3 illustrates socio-economic disparities across Victoria, with da
 #| label: fig-ses-sa3-zoom
 #| fig-cap: Projected Year 12 Population in SA3 Regions of Victoria for 2030
 # Processing for the Map
-sa3_ses30 <- vicdata_map |>
+sa3_ses30 <- sa1_shapefile_data |>
   filter(Percentile_Category == 1) |>
   group_by(SA3_NAME21) |>
   summarise(Sum_Year_2030_low_ses = sum(Year_2030, na.rm = TRUE)) |>
   ungroup()  |>
-  right_join(vicdata_map |>
+  right_join(sa1_shapefile_data |>
                distinct(SA3_NAME21), by = "SA3_NAME21") |>
   mutate(Sum_Year_2030_low_ses = ifelse(is.na(Sum_Year_2030_low_ses), 0, Sum_Year_2030_low_ses))  |>
   rename(SA3_NAME_2021 = SA3_NAME21)
 
-sa3_total_30 <- vicdata_map |>
+sa3_total_30 <- sa1_shapefile_data |>
   group_by(SA3_NAME21) |>
   summarise(Sum_Year_2030 = sum(Year_2030, na.rm = TRUE)) |>
   ungroup()  |>
-  right_join(vicdata_map |>
+  right_join(sa1_shapefile_data |>
                distinct(SA3_NAME21), by = "SA3_NAME21") |>
   mutate(Sum_Year_2030 = ifelse(is.na(Sum_Year_2030), 0, Sum_Year_2030))  |>
   rename(SA3_NAME_2021 = SA3_NAME21)
 
-sa3_ses30_map <- merged_data_forsa3 |>
+sa3_ses30_map <- sa3_population_ses_combined |>
   left_join(sa3_ses30 |>
               tibble() |>
               select(-geometry)
