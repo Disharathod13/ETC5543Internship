@@ -1,29 +1,35 @@
 ---
-title: "Final Report"
+title: "Forecasting Year 12 Graduates for Monash’s Low SES Enrollment Targets"
 author:
 - name: Disha Rathod
 phone: (04) 0328 1394
 email: drat0009@student.monash.edu
-organization: Data Intelligence and Insights Department of Monash
+organization: Intelligence and Insights Department of Monash
 bibliography: references.bib
 format: report-pdf
 ---
 
 # Introduction
 
+Over the past 12 weeks, I have been deeply involved in an analytical journey at Monash University’s Intelligence and Insights Committee, where I worked on a project that holds the potential to reshape access to higher education. With a focus on Victoria, my task was to forecast the Year 12 graduate population from diverse socio-economic backgrounds, especially targeting low SES regions. Using the Australian Bureau of Statistics (ABS) data and methodologies like SEIFA (Socio-Economic Indexes for Areas), I developed projections to understand which areas are likely to see significant growth or decline in university-ready students. This data-driven approach wasn’t just about numbers, it was about visualizing the real-world barriers and opportunities that shape educational futures.
+
+The implications of this work are far-reaching. For the Victorian Tertiary Admissions Centre (VTAC), which plays a pivotal role in guiding students through the university admissions process, these forecasts provide a clear, data-backed understanding of where efforts are needed most. For more information about VTAC, please refer to this - @vtac.
+
+On the university’s end, my analysis offers crucial insights for Monash's leadership. The Australian government has set an ambitious target: 20% of university enrollments must come from low SES regions. My forecasts will equip Monash's executives with the data they need to make informed decisions—whether that means investing in outreach programs, enhancing financial aid, or even expanding campus facilities to new areas. The goal is clear: to transform data into strategic actions that create a more efficient and equitable academic environment. By combining detailed demographic projections with insights into socio-economic factors, this project lays the groundwork for Monash University to not only meet the government's target but to surpass it, ensuring that higher education in Victoria is accessible to every student, regardless of their background.
+
+
+
 # Background, Motivation
 
-The project is driven by a clear and a very impactful goal where the Australian government has set a target for universities to ensure that at least 20% of their undergraduate students come from Low Socio-Economic Status (SES) backgrounds. This target aims to promote equality in terms of access to higher education, giving students from disadvantaged communities a fairer chance at achieving a university education. However, achieving this goal is not straightforward, it requires a detailed understanding of the current demographics, regional socioeconomic disparities, and the barriers that students face for which we have used SEIFA methodology.
+The motivation for this project stems from a critical objective set by the Australian government, which mandates that universities ensure at least 20% of their undergraduate enrollments come from Low Socio-Economic Status (SES) backgrounds. This initiative aims to achieve equality in access to higher education, allowing students from underprivileged communities to have a fair shot at pursuing a university education. However, reaching this target is complex, as it requires an in-depth understanding of the socio-economic landscape, regional disparities, and the distinct challenges faced by students in lower SES categories. To achieve this, the project leverages the Socio-Economic Indexes for Areas (SEIFA) methodology, as outlined by the Australian Bureau of Statistics (ABS) through their SEIFA 2021 data @ABS_SEIFA_2021, which assesses socio-economic factors such as income, education, and employment across Victoria's diverse regions.
 
-The primary focus of this project is the state of Victoria, which has regions with diverse socio-economic backgrounds. We aim to analyze the feasibility of meeting the government's target by forecasting the Year 12 graduates population which are the students who are potential university candidates—over the coming years. To do this, we're using data from the Australian Bureau of Statistics (ABS), specifically the 2021 Census, which provides insights into age demographics and socio-economic status across Victoria.
+The analysis is focused on Victoria, a state characterized by a variety of socio-economic backgrounds, which makes it an ideal case study for understanding the challenges of meeting low SES enrollment targets. By projecting the population of Year 12 graduates—students who represent potential university candidates—over the coming decade, the study aims to provide data-driven insights. The 2021 ABS Census data, a crucial source for understanding age demographics and socio-economic distribution, serves as the foundation for these forecasts. This is not just an exercise in number-crunching; it is an exploration of the barriers that low SES students face, such as distance to educational institutions, financial constraints that compel them to seek work rather than pursue higher education, and unequal access to essential academic resources.
 
-The analysis isn't just about numbers; it's about understanding the real challenges that students from Low SES backgrounds face. For example, some of the barriers include geographical distance to campuses, financial pressures that might force students to work rather than study, and differences in access to educational resources. The project will use R programming to visualize these factors on Victoria’s map, highlighting where populations are concentrated and identifying areas where students may have fewer opportunities to access higher education.
+A major component of the study involves predicting shifts in the Year 12 graduate population from 2021 to 2030. This demographic forecasting, coupled with socio-economic data, will help to pinpoint regions that require focused intervention to meet the university enrollment goals. Using R programming, these insights are visualized on maps of Victoria, illustrating both where populations are concentrated and which areas may be underserved in terms of educational opportunity.
 
-One key aspect of this project is understanding how the population and socio-economic landscape will evolve. Using statistical tools, we aim to predict changes in the Year 12 graduates population from 2021 to 2030. By combining this demographic forecasting with SES data, we can identify regions that may need targeted support to meet the enrollment goals.
+The project's ambition goes beyond simple data analysis. The findings are intended to serve as a strategic guide for Monash University, highlighting where efforts to boost accessibility should be concentrated. This could lead to actionable initiatives such as building new campuses in underserved areas, providing transportation support for students from low SES backgrounds, or creating flexible academic schedules that accommodate students balancing work and study commitments. These insights are not only beneficial for the university's strategic planning but can also influence governmental policies, ensuring that resources are allocated to where they are needed most.
 
-Beyond the analysis, the project has a broader purpose: to provide actionable insights for Monash University. By identifying patterns and trends, we can inform strategies to make higher education more accessible. This might involve expanding campuses closer to disadvantaged areas, offering free travel passes to students from Low SES regions, or designing flexible academic schedules to accommodate those who need to balance work and study. The project's findings could directly shape university policies and government decisions, ensuring that support is directed where it's most needed.
-
-In summary, this project isn't just about hitting enrollment targets—it's about understanding and overcoming the challenges that disadvantaged students face in accessing education. It’s a step towards a fairer and more inclusive education system, where all students, regardless of background, have a chance to succeed.
+In essence, this project is not solely about meeting quantitative targets but about gaining a deep understanding of the real obstacles faced by disadvantaged students. It aims to dismantle these barriers, paving the way for a more inclusive and equitable educational environment. By addressing these challenges, the project contributes to a vision of higher education where all students, regardless of socio-economic status, have the opportunity to achieve their academic and career goals.
 
 
 # Objectives and Significance
@@ -31,23 +37,27 @@ In summary, this project isn't just about hitting enrollment targets—it's abou
 
 ## Key Objectives
 
-Our project centered on understanding and forecasting Year 12-ready populations in Victoria from 2021 to 2030, with a focus on socio-economic disparities. By projecting future student numbers, we aimed to identify which regions would experience growth or decline, allowing Monash University to make informed decisions about resource allocation. These projections help Monash anticipate changes in enrollment demands and prepare accordingly, from expanding campus facilities to focusing recruitment and retention efforts where they are needed most.
+The primary objective of this project was to forecast the Year 12-ready populations in Victoria from 2021 to 2030, with a distinct emphasis on identifying and understanding socio-economic disparities. By projecting these student numbers, we aimed to determine which regions would see increases or decreases in university-ready populations, allowing Monash University to plan effectively for future enrollment demands. This foresight helps Monash anticipate changes and adjust its strategies, whether that involves expanding campus infrastructure, enhancing recruitment efforts, or developing targeted retention initiatives to support specific regions.
 
-To get a clear picture of socio-economic challenges, we used the Socio-Economic Indexes for Areas (SEIFA) methodology, which ranks regions based on various indicators like income, education, and employment. This analysis helped us pinpoint the most disadvantaged areas, highlighting where socio-economic barriers could hinder access to education. Understanding these disparities allows Monash University to target its outreach and support programs more effectively, ensuring resources go to regions with the greatest need.
+To achieve a nuanced understanding of socio-economic challenges, we utilized the Socio-Economic Indexes for Areas (SEIFA) methodology developed by the Australian Bureau of Statistics (ABS), as outlined in SEIFA 2021 @ABS_SEIFA_2021. This method ranks regions based on factors such as income, education, and employment, enabling us to identify the most disadvantaged areas in Victoria. These insights allowed Monash University to focus its outreach and support programs on regions with the highest need, ensuring that resources are directed where they can have the greatest impact.
 
-We combined statistical analysis with geospatial mapping to create a comprehensive view of the educational landscape in Victoria. While statistical data gave us the numbers, the maps allowed us to visualize how these figures played out geographically. This combination not only showed us what was happening but also why certain regions faced greater challenges. It provided a clearer context for Monash, helping them understand the socio-economic dynamics at play and informing where to focus efforts for the greatest impact.
+Our analysis integrated statistical modeling with geospatial mapping, providing a dual perspective on Victoria's educational landscape. While statistical projections offered quantitative data, mapping visualized these numbers within their geographic and socio-economic contexts. This combination not only identified the extent of disparities but also clarified why certain regions faced greater challenges. This contextual understanding was crucial for Monash, helping them comprehend the socio-economic dynamics influencing educational access and allowing them to prioritize their efforts accordingly.
 
-The ultimate goal was to provide Monash University with data-driven recommendations to increase Low SES enrollments. By merging population projections with socio-economic analysis, we highlighted key areas for intervention. This guidance helps the university make strategic decisions about where to direct scholarships, outreach, and academic support to ensure it aligns with their mission to improve access for disadvantaged students. Our approach, grounded in both numbers and real-world context, offers a pathway for Monash to foster a more equitable and inclusive educational environment across Victoria.
+The overarching goal was to deliver actionable, data-driven recommendations to Monash University, guiding their strategy for increasing Low SES enrollments. By blending demographic forecasting with socio-economic insights, we pinpointed regions most in need of support. These recommendations are intended to steer Monash's decision-making in allocating scholarships, directing outreach programs, and enhancing academic support for students from disadvantages regions. Our evidence-based approach provides a concrete path for Monash to create a more inclusive and accessible educational environment across Victoria.
 
 ## Significance of the Analysis and Methodology
 
-Our project aimed to support equitable access to education by using SEIFA to identify socio-economic disparities in Victoria. This analysis helped Monash University pinpoint areas facing the most significant challenges, ensuring their initiatives are grounded in evidence and targeted for maximum impact. The demographic and socio-economic analysis offered a clear roadmap for strategic resource allocation, whether it's expanding facilities in high-growth areas or providing additional support where student numbers are declining. By combining statistical projections with geospatial mapping, we were able to see the human context behind the data, showing how socio-economic conditions intersect with geography. This comprehensive approach provided Monash with valuable insights to address the real challenges faced by students, making their outreach and support efforts more effective. Overall, the project delivered a data-driven view of Victoria’s Year 12 landscape, identifying both areas of need and opportunities for growth. This blend of demographic analysis, SEIFA insights, and visual techniques equips Monash with practical recommendations to boost Low SES enrollment and foster a more inclusive education environment.
+This project holds significant value in supporting equitable access to education by using SEIFA to expose socio-economic disparities within Victoria. By pinpointing regions with substantial socio-economic challenges, Monash University can ground its initiatives in solid evidence, targeting efforts for the greatest possible impact. Our approach offered a strategic guide for the allocation of resources, from expanding facilities in areas with anticipated growth to concentrating support in regions where Year 12 graduate populations are predicted to rise.
+
+One of the key strengths of our methodology lies in its ability to present data in both statistical and visual forms. Statistical projections provided the necessary quantitative analysis, but by pairing these numbers with geospatial mapping, we could illustrate the broader context and human stories behind the figures. This visual representation clarified how socio-economic factors intersect with geography, revealing patterns that pure statistics might overlook. The comprehensive view provided Monash with a deeper understanding of the real-world challenges faced by students, making their outreach efforts more targeted and impactful.
+
+The project’s innovative combination of demographic forecasting, SEIFA insights, and visual analytics resulted in a thorough understanding of Victoria’s Year 12 landscape. By blending multiple data sources, we created a nuanced analysis that not only highlighted areas of disadvantage but also identified opportunities for growth and investment. This multifaceted approach equips Monash University with practical, evidence-based recommendations to enhance Low SES enrollment, advancing their mission to foster a more equitable education system. Overall, the project delivered a robust, data-driven foundation for making informed decisions, helping Monash lead the way in creating an inclusive and supportive educational environment for all students.
 
 # Methodology
 
 ## Introduction to Methodology
 
-The goal of this project is to help Monash University meet the government's target of increasing Low SES student participation (i.e. 20%). Over the past 12 weeks, I was working at Monash’s Intelligence and Analytics unit, led by Patrick Leung, has been dedicated to this analysis, using a range of data tools and visualization techniques in R.
+The goal of this project is to help Monash University meet the government's target of increasing Low SES student participation (i.e. 20%). Over the past 12 weeks, I was working at Monash’s Intelligence and Insights unit, led by Patrick Leung, has been dedicated to this analysis, using a range of data tools and visualization techniques in R.
 
 Our approach began with collecting and preparing data from the 2021 Australian Bureau of Statistics (ABS) Census, which provided crucial information on the Year 12 graduates population and socio-economic indicators. We used R to clean and merge these datasets, managing the challenges of incomplete and unavailable information. The focus was on ensuring that the data was accurate and reliable for further analysis.
 
@@ -57,20 +67,20 @@ Overall, our methodology was about more than just crunching numbers; it was abou
 
 ## Data Collection and Preparation
 
-###Data Sources
+### Data Sources
 
 The backbone of this project was the data sourced from the 2021 Census conducted by the Australian Bureau of Statistics (ABS). This data was essential in understanding the demographic distribution and socio-economic factors across Victoria, specifically focusing on students likely to become Year 12 graduates in the coming years. By examining the age demographics and socio-economic indicators provided by the census, we were able to identify which regions had higher or lower socio-economic advantages. This was critical for categorizing socio-economic status (SES) using SEIFA (Socio-Economic Indexes for Areas) methodology.
 
 We utilized data from three geographical levels—Statistical Area 1 (SA1), Statistical Area 3 (SA3), and Statistical Area 4 (SA4). SA1 provided a detailed view, highlighting localized trends and disparities, while SA3 and SA4 gave us a broader regional perspective. This multi-level approach was crucial for capturing both localized and state-wide patterns, allowing us to identify areas of disadvantage or opportunity accurately.
 
-To streamline the data and focus specifically on Year 12 readiness, we used the ABS Table Builder. This tool allowed us to create custom datasets that concentrated on the age groups relevant to our study and narrowed down the socio-economic factors affecting educational access. Additionally, we incorporated data on university campus locations to understand how accessibility might vary by region, offering insights into the potential impact of distance and proximity on Low SES students.
+To streamline the data and focus specifically on Year 12 readiness, we used the ABS Table Builder. This tool allowed us to create custom datasets that concentrated on the age groups relevant to our study and narrowed down the socio-economic factors affecting educational access. Additionally, we incorporated data on university campus locations to understand how accessibility might vary by region, offering insights into the potential impact of distance and proximity on Low SES students. To learn more about this Table Builder, you can visit - @abs_tablebuilder.
 
 
-###Data Preprocessing
+### Data Preprocessing
 
 Preparing the data for analysis was a critical step, ensuring accuracy and relevance for our projections. Here are the main tasks we undertook:
 
-```{r}
+```{r load-libs}
 # loading the libraries
 library(tidyverse)
 library(tibble)
@@ -80,178 +90,241 @@ library(readxl)
 library(sf)
 library(knitr)
 library(kableExtra)
-
-# Reading the CSV file without headers 
-sa1_age_data <- read.csv("../Data/SA1_age.csv", skip = 10, header = FALSE, check.names = FALSE, row.names = NULL)
+```
 
 
+```{r read-data}
+# Reading the CSV file without headers
+# Skip the first 10 rows which might contain metadata or descriptions
+# 'header = FALSE' indicates there are no headers in the CSV file
+# 'check.names = FALSE' prevents automatic correction of column names
+# 'row.names = NULL' avoids assigning any column as row names
+sa1_age_data <- read.csv(
+  "../Data/SA1_age.csv",
+  skip = 10,
+  header = FALSE,
+  check.names = FALSE,
+  row.names = NULL
+)
 
-# Defining the column names
+# Defining the column names manually, as the original file doesn't have headers
 colnames(sa1_age_data) <- c("SA1reg", "Age", "Count", "OtherColumn") 
 
+# Removing the first row, which may contain unwanted data
 sa1_age_data <- sa1_age_data %>%
-  slice(-1)  
+  slice(-1)
 
-# Remove the last column 
+# Remove the last column since it's not needed for analysis
 sa1_age_data <- sa1_age_data[, -ncol(sa1_age_data)]
 
-# Fill down the first row values in the SA1reg column
+# Fill down the first row values in the 'SA1reg' column
+# This step handles missing 'SA1reg' entries by filling down previous values
 sa1_age_data$SA1reg[sa1_age_data$SA1reg == ""] <- NA
 sa1_age_data <- sa1_age_data %>%
   fill(SA1reg, .direction = "down")
 
-sa1_age_data <- sa1_age_data |> 
+# Removing rows with 'Total' in 'SA1reg' column as it represents aggregate data
+sa1_age_data <- sa1_age_data |>
   filter(SA1reg != 'Total')
 
+# Calculating the total population count from the 'Count' column
+# Use 'na.rm = TRUE' to ignore any missing values
 total_population <- sum(sa1_age_data$Count, na.rm = TRUE)
-total_population
 
-
-
-
-# First, ensure the 'Age' column is numeric
+# Ensure the 'Age' column is numeric for further calculations
 sa1_age_data$Age <- as.numeric(sa1_age_data$Age)
 
-# Create new columns for the years 2021 to 2030
+# Creating new columns for each year from 2021 to 2030
+# Each year aggregates counts for specific age groups relevant for projections
 sa1_age_data_new <- sa1_age_data %>%
   mutate(
     `2021` = case_when(Age %in% c(17, 18, 19) ~ Count, TRUE ~ 0),
+    # Ages 17-19 for 2021
     `2022` = case_when(Age %in% c(16, 17, 18) ~ Count, TRUE ~ 0),
+    # Ages 16-18 for 2022
     `2023` = case_when(Age %in% c(15, 16, 17) ~ Count, TRUE ~ 0),
+    # Ages 15-17 for 2023
     `2024` = case_when(Age %in% c(14, 15, 16) ~ Count, TRUE ~ 0),
+    # Ages 14-16 for 2024
     `2025` = case_when(Age %in% c(13, 14, 15) ~ Count, TRUE ~ 0),
+    # Ages 13-15 for 2025
     `2026` = case_when(Age %in% c(12, 13, 14) ~ Count, TRUE ~ 0),
+    # Ages 12-14 for 2026
     `2027` = case_when(Age %in% c(11, 12, 13) ~ Count, TRUE ~ 0),
+    # Ages 11-13 for 2027
     `2028` = case_when(Age %in% c(10, 11, 12) ~ Count, TRUE ~ 0),
+    # Ages 10-12 for 2028
     `2029` = case_when(Age %in% c(9, 10, 11) ~ Count, TRUE ~ 0),
-    `2030` = case_when(Age %in% c(8, 9, 10) ~ Count, TRUE ~ 0
-    )
+    # Ages 9-11 for 2029
+    `2030` = case_when(Age %in% c(8, 9, 10) ~ Count, TRUE ~ 0)     # Ages 8-10 for 2030
   ) %>%
   group_by(SA1reg) %>%
   summarise(
     `2021` = sum(`2021`) / 3,
-    `2022` = sum(`2022`)/ 3,
-    `2023` = sum(`2023`)/ 3,
-    `2024` = sum(`2024`)/ 3,
-    `2025` = sum(`2025`)/ 3,
-    `2026` = sum(`2026`)/ 3,
-    `2027` = sum(`2027`)/ 3,
-    `2028` = sum(`2028`)/ 3,
-    `2029` = sum(`2029`)/ 3,
-    `2030` = sum(`2030`)/ 3,
-    .groups = 'drop'
+    # Averaging counts for year 2021
+    `2022` = sum(`2022`) / 3,
+    # Averaging counts for year 2022
+    `2023` = sum(`2023`) / 3,
+    # Averaging counts for year 2023
+    `2024` = sum(`2024`) / 3,
+    # Averaging counts for year 2024
+    `2025` = sum(`2025`) / 3,
+    # Averaging counts for year 2025
+    `2026` = sum(`2026`) / 3,
+    # Averaging counts for year 2026
+    `2027` = sum(`2027`) / 3,
+    # Averaging counts for year 2027
+    `2028` = sum(`2028`) / 3,
+    # Averaging counts for year 2028
+    `2029` = sum(`2029`) / 3,
+    # Averaging counts for year 2029
+    `2030` = sum(`2030`) / 3,
+    # Averaging counts for year 2030
+    .groups = 'drop'  # Remove grouping after summarisation
   )
 
-
-sa1_age_data_new <- sa1_age_data_new |> 
-  mutate(SA1reg = as.numeric(SA1reg)) |> 
+# Convert 'SA1reg' column to numeric and filter out any rows with missing values
+sa1_age_data_new <- sa1_age_data_new |>
+  mutate(SA1reg = as.numeric(SA1reg)) |>
   filter(!is.na(SA1reg))
 
-#Pivot longer to the year and the values 
-data_long <-  sa1_age_data_new %>%
-  pivot_longer(cols = `2021`:`2030`, names_to = "Year", values_to = "Value")
+# Pivot the data longer for analysis or visualization
+# Columns from '2021' to '2030' will be gathered into a 'Year' column with their values in a 'Value' column
+data_long <- sa1_age_data_new %>%
+  pivot_longer(cols = `2021`:`2030`,
+               names_to = "Year",
+               values_to = "Value")
 
 ```
 
-```{r}
-#Read the excel file
+**Reading and Merging Datasets**:
+   - We began by importing data from multiple sources using read.csv() and read_excel() from the tidyverse package. Each dataset had distinct structures, with some in CSV format and others in Excel. We cleaned these datasets to maintain consistency.
+Merging the datasets was an intricate task because they used different identifiers. Total population was calculated for Victoria for the year 2021 which came out to be `r total_population` which was very close to the population reported by ABS @refer1. We performed joins using left_join() from the dplyr package, matching data based on geographical codes such as SA1, SA3, and SA4. This step allowed us to create a unified dataset necessary for further analysis.
+
+```{r sa-summarise}
+#| label: tbl-the-table
+#| tbl-cap: Year 12 Graduate Population Projection
+# Read the Excel file containing regions data and filter to only include Victoria
+# 'SAregions_AUS.xlsx' is expected to have information on Australian regions
+# We filter for Victoria as it's the area of interest
 SAregions_AUS <- read_excel("../Data/SAregions_AUS.xlsx")
 SAregions_AUS <- SAregions_AUS |> filter(STATE_NAME_2021 == "Victoria")
 
-
-
-
-
-# The column name in SAregions_AUS is different, rename it 
+# Rename the 'SA1_CODE_2021' column to 'SA1reg' for consistency with the other dataset
 colnames(SAregions_AUS)[colnames(SAregions_AUS) == "SA1_CODE_2021"] <- "SA1reg"
 
-
+# Combine the demographic data with regional data using a left join on the 'SA1reg' column
+# 'data_long' contains population information, and 'SAregions_AUS' contains region information
 combined_data <- left_join(data_long, SAregions_AUS, by = "SA1reg")
-# Summarize the data by Year
+
+# Summarize the combined data by 'Year', aggregating total values
+# The result is a summary table with total values for each year
 thetable <- combined_data %>%
   group_by(Year) %>%
-  summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%
-  arrange(Year)  |> 
-  ungroup()
+  summarize(Population = sum(Value, na.rm = TRUE)) %>% # Sum up the values, ignoring NAs
+  arrange(Year) |>  # Sort by year for clarity
+  ungroup()          # Remove the grouping
 
-thetable
+# Create a styled table to display summarized yearly data
+kable(thetable |> head()) %>%
+  kable_styling(latex_options = c("striped"))
+```
 
-# Create a table
-kable(thetable, caption = "Total Values Summarized by Year") %>%
-  kable_styling("striped", full_width = F)
+In @tbl-the-table, we can see the projected values for Year 12 graduate population that will be ready every year and this table will also help us build the trend line. 
 
-# Summarize the data by SA4_NAME_2021 and Year
+```{r sa4-summarise}
+#| label: tbl-sa4-summarise
+#| tbl-cap: Summarized Year 12 Population values by SA4 Region and Year
+# Further summarization: Group data by 'SA4_NAME_2021' and 'Year'
+# This helps in understanding trends at the SA4 (Statistical Area Level 4) region level
 summarized_data <- combined_data %>%
   group_by(SA4_NAME_2021, Year) %>%
-  summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%
-  ungroup()  
+  summarize(Total_Value = sum(Value, na.rm = TRUE)) %>%  # Sum up values for each region and year
+  ungroup()  # Remove the grouping to simplify further operations
 
-# Convert Year to numeric in the data frame
+# Ensure the 'Year' column is numeric for plotting or further numerical analysis
 summarized_data <- summarized_data %>%
   mutate(Year = as.numeric(Year))
 
-# Check the structure of the summarized data
-str(summarized_data)
+# Check the structure of 'summarized_data' to confirm the data types and structure are as expected
+summarized_data %>%
+  arrange(SA4_NAME_2021, Year) %>%  # Arrange data by region and year for better readability
+  head() %>%
+  kable(
+    col.names = c("Region", "Year", "Population")
+  ) %>%
+  kable_styling(
+    latex_options = c("striped"),
+    full_width = FALSE
+  ) %>%
+  column_spec(1, bold = TRUE) %>%  # Make the region column bold
+  column_spec(2, width = "8em") %>%  # Adjust column widths for better visibility
+  column_spec(3, width = "10em")
 ```
 
+In @tbl-sa4-summarise, I have taken the projected Year 12 population values every year as @tbl-the-table and divided them by SA4 regions each, as this makes our analysis easier in the further part of the project. 
 
-
-```{r}
+```{r percent-aus}
+# Reading SA1 data of whole Australia
 percentile_invic <- read.csv("../Data/SA1_rankingwstate.csv")
 glimpse(percentile_invic)
+```
 
+This dataset gives us the SES status defining variables in detail for each SA1 region in whole of Australia. 
 
-
+```{r percent-in-vic}
+# Filtering SA1 of only Victoria
 percentile_invic <- percentile_invic %>%
   rename(SA1reg = X2021.Statistical.Area.Level.1..SA1.) %>%
   filter(State == "VIC")
 
 glimpse(percentile_invic)
-
-
-
-
-# Perform the left join
- vicdata_new <- data_long %>%
-left_join(percentile_invic, by = "SA1reg") 
- 
- # Remove rows with any NA values
- vicdata_new <- na.omit(vicdata_new)
- 
- 
-#Join the SA4_NAME_2021 column from SAregions_AUS to vicdata_new
- vicdata_new <- vicdata_new %>%
-   left_join(SAregions_AUS %>% select(SA1reg, SA4_NAME_2021), by = "SA1reg") %>%
-   na.omit()
- 
- # Create a new column based on Percentile.within.State ranges
- vicdata_new <- vicdata_new %>%
-   mutate(Percentile_Category = case_when(
-     Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
-     Percentile.within.State >= 26 & Percentile.within.State <= 50 ~ 2,
-     Percentile.within.State >= 51 & Percentile.within.State <= 75 ~ 3,
-     Percentile.within.State >= 76 & Percentile.within.State <= 100 ~ 4
-   ))
- 
-#Check the updated dataset
- glimpse(vicdata_new)
- 
- #Convert Year to numeric if it's not already
- vicdata_new$Year <- as.numeric(vicdata_new$Year)
- 
-#Summarize the data to get the sum of Values by SA4, Year, and Percentile_Category
- vicdata_sum <- vicdata_new %>%
-   group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
-   summarise(Cumulative_Value = sum(Value)) %>%
-   ungroup()
 ```
 
+Here, we have filtered only the SA1 regions in Victoria, as we are only focusing on VIC for our project. 
+
+```{r combine-sa4}
+# Perform the left join
+vicdata_new <- data_long %>%
+  left_join(percentile_invic, by = "SA1reg")
+
+# Remove rows with any NA values
+vicdata_new <- na.omit(vicdata_new)
 
 
+# Join the SA4_NAME_2021 column from SAregions_AUS to vicdata_new
+vicdata_new <- vicdata_new %>%
+  left_join(SAregions_AUS %>% select(SA1reg, SA4_NAME_2021), by = "SA1reg") %>%
+  na.omit()
 
-**Reading and Merging Datasets**:
-   - We began by importing data from multiple sources using read.csv() and read_excel() from the tidyverse package. Each dataset had distinct structures, with some in CSV format and others in Excel. We cleaned these datasets to maintain consistency.
-Merging the datasets was an intricate task because they used different identifiers. We performed joins using left_join() from the dplyr package, matching data based on geographical codes such as SA1, SA3, and SA4. This step allowed us to create a unified dataset necessary for further analysis.
+# Create a new column based on Percentile.within.State ranges
+vicdata_new <- vicdata_new %>%
+  mutate(
+    Percentile_Category = case_when(
+      Percentile.within.State >= 0 & Percentile.within.State <= 25 ~ 1,
+      Percentile.within.State >= 26 &
+        Percentile.within.State <= 50 ~ 2,
+      Percentile.within.State >= 51 &
+        Percentile.within.State <= 75 ~ 3,
+      Percentile.within.State >= 76 &
+        Percentile.within.State <= 100 ~ 4
+    )
+  )
+ 
+# Check the updated dataset
+glimpse(vicdata_new)
+ 
+# Convert Year to numeric if it's not already
+vicdata_new$Year <- as.numeric(vicdata_new$Year)
+ 
+# Summarize the data to get the sum of Values by SA4, Year, and Percentile_Category
+vicdata_sum <- vicdata_new %>%
+  group_by(SA4_NAME_2021, Year, Percentile_Category) %>%
+  summarise(Sum_Value = sum(Value)) %>%
+  ungroup()
+```
+
+This is the dataset that we have created by joining the dataset which had the population values of Year 12 graduates in Victoria with the SES defining data. 
 
 **Handling Missing Data**:
    - Missing data can skew results, so it was essential to handle any gaps in our datasets. We removed regions with unreliable data using the filter() function and addressed missing values with fill() to maintain data continuity, ensuring logical estimates for gaps.
@@ -361,18 +434,17 @@ These tools and packages were critical to our workflow, providing the functional
 
 ## The line graph for the projections made for Year 12 population in Victoria
 
-```{r}
-#|label: fig-year-trend
-#|fig-cap: The Trend for Year 12 Population
-ggplot(thetable, aes(x = Year, y = Total_Value, group = 1)) +
+```{r projection}
+#| label: fig-year-trend
+#| fig-cap: The Trend for Year 12 Population
+ggplot(thetable, aes(x = Year, y = Population, group = 1)) +
   geom_line(color = "blue", size = 1) +
   geom_point(color = "red", size = 2) +
   labs(title = "The Trend for Year 12 Population", x = "Year", y = "Total Population") +
   theme_minimal()
 ```
 
-As shown in @fig-year-trend, the Year 12 population trend illustrates...
-the projected Year 12 graduate population in Victoria from 2021 to 2030. The x-axis represents the years, ranging from 2021 to 2030, while the y-axis indicates the total projected population of Year 12 graduates.
+As shown in @fig-year-trend, the projected Year 12 graduate population in Victoria from 2021 to 2030, the x-axis represents the years, ranging from 2021 to 2030, while the y-axis indicates the total projected population of Year 12 graduates.
 
 **Analysis of the Graph:**
 The trend line, marked in blue, showcases a general upward trend in the Year 12 population over the decade. From 2021 to 2023, there is a relatively modest increase in the population, suggesting steady growth. After 2025, the graph shows a continued but steadier incline, suggesting sustained growth in the Year 12 population until 2030, mostly at a slightly slower rate. The red dots on the graph indicate specific data points for each year, emphasizing the consistency of the growth pattern over time. The visual clearly points out that by 2030, the Year 12 graduate population is expected to be substantially higher than the preceeding years, reflecting a positive trend in education completion rates.
@@ -385,7 +457,9 @@ The projection helps inform strategic planning, allowing targeted outreach effor
 
 ## The projection of the population values forecasted for each SA4 region in Victoria 
 
-```{r}
+```{r projection-sa4}
+#| label: fig-sa4-proj
+#| fig-cap: Total Value by Year for Each SA4 Region in Victoria (2021-2030)
 # Create the plot with facet_wrap, line graph, and points
 ggplot(summarized_data, aes(x = Year, y = Total_Value)) +
   geom_line() +
@@ -399,47 +473,53 @@ ggplot(summarized_data, aes(x = Year, y = Total_Value)) +
   theme_minimal() +
   facet_wrap(~ SA4_NAME_2021, scales = "free_y")
 ```
-The graph displays the projected Year 12 graduate population from 2021 to 2030 across various SA4 regions in Victoria. Each subplot represents a different region, allowing us to visualize how the Year 12-ready population is expected to evolve over the decade. The x-axis indicates the years from 2021 to 2030, while the y-axis shows the projected population values. The solid line in each subplot connects the data points year by year, providing a clear trend for each region.
+The @fig-sa4-proj displays the projected Year 12 graduate population from 2021 to 2030 across various SA4 regions in Victoria. Each subplot represents a different region, allowing us to visualize how the Year 12-ready population is expected to evolve over the decade. The x-axis indicates the years from 2021 to 2030, while the y-axis shows the projected population values. The solid line in each subplot connects the data points year by year, providing a clear trend for each region.
 
 **Analysis of the Graph:**
 The projections vary significantly across regions, reflecting diverse local population trends. For instance, regions like Melbourne - South East and Melbourne - West show a consistent upward trend, indicating steady growth in the Year 12 population(which are the areas closer to Monash campuses). These areas are likely to see an increasing number of graduates over the next decade. In contrast, regions such as Melbourne - Inner East and Shepparton exhibit a peak followed by a decline, suggesting that the Year 12 population might decrease after hitting a peak around the mid-2020s.
 
 **Relation to Project Objectives:**
-The graph directly aligns with the project's objectives of understanding Year 12 demographic trends in Victoria. By breaking down projections by SA4 regions, the graph enables Monash University to pinpoint which areas might face higher educational demand and where interventions may be necessary. For regions showing strong growth, strategic planning can involve increasing outreach, resources, or infrastructure to accommodate more students. Conversely, regions showing potential declines may benefit from retention strategies or targeted programs to ensure students remain engaged and are encouraged to complete Year 12.
+The @fig-sa4-proj directly aligns with the project's objectives of understanding Year 12 demographic trends in Victoria. By breaking down projections by SA4 regions, the graph enables Monash University to pinpoint which areas might face higher educational demand and where interventions may be necessary. For regions showing strong growth, strategic planning can involve increasing outreach, resources, or infrastructure to accommodate more students. Conversely, regions showing potential declines may benefit from retention strategies or targeted programs to ensure students remain engaged and are encouraged to complete Year 12.
 
 ## Trend for each Percentile Category in every SA4 region in Victoria (Red = LowSES)
 
-```{r}
-ggplot(vicdata_sum, aes(x = Year, y = Sum_Value, color = factor(Percentile_Category))) +
-   geom_line() +
-facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
- scale_x_continuous(breaks = seq(2021, 2030, 1)) +
-  labs(title = "Population by Year for SA4 Region in VIC",
-         x = "Year",
-         y = "Population",
-color = "Percentile Category") +
-   theme_minimal() +
-   theme(axis.text.x = element_text(angle = 45, hjust = 1))
- 
+```{r trend-sa4}
+#| label: fig-sa4-trend
+#| fig-cap: Yearly Population Trends by SA4 Region and Percentile Category in Victoria (2021-2030)
+ggplot(vicdata_sum, aes(
+  x = Year,
+  y = Sum_Value,
+  color = factor(Percentile_Category)
+)) +
+  geom_line() +
+  facet_wrap( ~ SA4_NAME_2021, scales = "free_y") +
+  scale_x_continuous(breaks = seq(2021, 2030, 1)) +
+  labs(
+    title = "Population by Year for SA4 Region in VIC",
+    x = "Year",
+    y = "Population",
+    color = "Percentile Category"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-The third graph illustrates the projected Year 12 population trends across various SA4 regions in Victoria, broken down by socio-economic percentile categories. Each line color corresponds to a different SES group, with the red line representing the lowest socio-economic status (most disadvantaged) and the purple line indicating the highest socio-economic status (most advantaged). Green and blue lines depict the middle-low and middle-high SES groups, respectively.
+
+The @fig-sa4-trend illustrates the projected Year 12 population trends across various SA4 regions in Victoria, broken down by socio-economic percentile categories. Each line color corresponds to a different SES group, with the red line representing the lowest socio-economic status (most disadvantaged) and the purple line indicating the highest socio-economic status (most advantaged). Green and blue lines depict the middle-low and middle-high SES groups, respectively.
 
 The Melbourne North-west (closer to our campuses) and North West have an upwqard trend line for Low SES population for year 12, that can help us make further decisions. 
 
-
 ## Tha SES map of 2021 (Socio Economic status of regions in central part of Victoria for SA3)
-```{r}
-# Processing the map data
-vic_sa1_shapefile <- st_read("../Data/SA1_2021_AUST_GDA2020.shp")
 
+```{r map-data}
+# Processing the map data
+vic_sa1_shapefile <- st_read("../Data/SA1_2021_AUST_GDA2020.shp", quiet = TRUE)
 
 vicdata_map <- vic_sa1_shapefile %>% filter(STE_NAME21 == "Victoria")
 
-
-
-
 vicdata_wide <- vicdata_new %>%
-  pivot_wider(names_from = Year, values_from = Value, names_prefix = "Year_")
+  pivot_wider(names_from = Year,
+              values_from = Value,
+              names_prefix = "Year_")
 
 # Convert SA1reg from double to character
 vicdata_wide <- vicdata_wide %>%
@@ -449,10 +529,7 @@ vicdata_wide <- vicdata_wide %>%
 vicdata_map <- vicdata_map %>%
 left_join(vicdata_wide, by = c("SA1_CODE21" = "SA1reg"))
 
-SA3_shapefile <- st_read("../Data/SA3_2021_AUST_SHP_GDA2020/SA3_2021_AUST_GDA2020.shp")
-
-
-glimpse(SA3_shapefile)
+SA3_shapefile <- st_read("../Data/SA3_2021_AUST_SHP_GDA2020/SA3_2021_AUST_GDA2020.shp", quiet = TRUE)
 
 vicdata_map_sa3 <- SA3_shapefile %>% filter(STE_NAME21 == "Victoria")
 
@@ -482,14 +559,14 @@ merged_data_forsa3 <- combined_data_new %>%
   ungroup() |> 
   left_join(vicdata_map_sa3, by = c("SA3_NAME_2021" = "SA3_NAME21"))
 
-
 merged_data_forsa3 <- st_as_sf(merged_data_forsa3)
 ```
 
 
 
-```{r}
-
+```{r ses-sa3-2021}
+#| label: fig-ses-sa3
+#| fig-cap: Socio-Economic Status Across SA3 Regions in Victoria in 2021
 # Zoom-in the map
 zoom_lon_min <- 143  
 zoom_lon_max <- 146
@@ -507,127 +584,250 @@ monash_lat_park <- -37.7838
 monash_lon_park <- 144.9586
 
 # SA3 map for 2021
+sa3_ses21 <- vicdata_map |>
+  filter(Percentile_Category == 1) |>
+  group_by(SA3_NAME21) |>
+  summarise(Sum_Year_2021_low_ses = sum(Year_2021, na.rm = TRUE)) |>
+  ungroup()  |>
+  right_join(vicdata_map |>
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>
+  mutate(Sum_Year_2021_low_ses = ifelse(is.na(Sum_Year_2021_low_ses), 0, Sum_Year_2021_low_ses))  |>
+  rename(SA3_NAME_2021 = SA3_NAME21)
 
- sa3_ses21<- vicdata_map |> 
-  filter(Percentile_Category == 1) |>      
-  group_by(SA3_NAME21) |>        
-  summarise(Sum_Year_2021_low_ses = sum(Year_2021, na.rm = TRUE)) |> 
-  ungroup()  |> 
-   right_join(vicdata_map |> 
-                distinct(SA3_NAME21), by = "SA3_NAME21") |>  
-   mutate(Sum_Year_2021_low_ses = ifelse(is.na(Sum_Year_2021_low_ses), 0, Sum_Year_2021_low_ses))  |> 
-   rename(SA3_NAME_2021 = SA3_NAME21)
+sa3_total_21 <- vicdata_map |>
+  group_by(SA3_NAME21) |>
+  summarise(Sum_Year_2021 = sum(Year_2021, na.rm = TRUE)) |>
+  ungroup()  |>
+  right_join(vicdata_map |>
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>
+  mutate(Sum_Year_2021 = ifelse(is.na(Sum_Year_2021), 0, Sum_Year_2021))  |>
+  rename(SA3_NAME_2021 = SA3_NAME21)
  
- sa3_total_21 <- vicdata_map |>     
-   group_by(SA3_NAME21) |>        
-   summarise(Sum_Year_2021 = sum(Year_2021, na.rm = TRUE)) |> 
-   ungroup()  |> 
-   right_join(vicdata_map |> 
-                distinct(SA3_NAME21), by = "SA3_NAME21") |>  
-   mutate(Sum_Year_2021 = ifelse(is.na(Sum_Year_2021), 0, Sum_Year_2021))  |> 
-   rename(SA3_NAME_2021 = SA3_NAME21)
- 
-sa3_ses21_map <- merged_data_forsa3 |> 
-  left_join(sa3_ses21 |> 
-              tibble()|>
-              select(-geometry) 
-            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))|> 
-  left_join(sa3_total_21 |> 
-              tibble()|>
-              select(-geometry) 
-            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
+sa3_ses21_map <- merged_data_forsa3 |>
+  left_join(sa3_ses21 |>
+              tibble() |>
+              select(-geometry)
+            ,
+            by = c("SA3_NAME_2021" = "SA3_NAME_2021")) |>
+  left_join(sa3_total_21 |>
+              tibble() |>
+              select(-geometry)
+            ,
+            by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
 
 # Plotting the map
-
 ggplot(data = sa3_ses21_map) +
-  geom_sf(aes(fill = Sum_Year_2021_low_ses, geometry = geometry)) +  
-  labs(title = "SA3 Regions in Victoria by Socio-economic status in 2021",
-       subtitle = "SES status",
-       caption = "Source: ABS & Custom Data",
-       x = "Latitude",  
-       y = "Longitude",
-       fill = "High to Low SES") +
-  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
-  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
-  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
-  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
-  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) +
-  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
-  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
-  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
-  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
+  geom_sf(aes(fill = Sum_Year_2021_low_ses, geometry = geometry)) +
+  labs(
+    title = "SA3 Regions in Victoria by Socio-economic status in 2021",
+    subtitle = "SES status",
+    caption = "Source: ABS & Custom Data",
+    x = "Latitude",
+    y = "Longitude",
+    fill = "High to Low SES"
+  ) +
+  coord_sf(
+    xlim = c(zoom_lon_min, zoom_lon_max),
+    ylim = c(zoom_lat_max, zoom_lat_min)
+  ) +
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl),
+             color = "red",
+             size = 2) +
+  geom_point(
+    aes(x = monash_lon_caul, y = monash_lat_caul),
+    color = "yellow",
+    size = 2
+  ) +
+  geom_point(
+    aes(x = monash_lon_pen, y = monash_lat_pen),
+    color = "lightgreen",
+    size = 2
+  ) +
+  geom_point(
+    aes(x = monash_lon_park, y = monash_lat_park),
+    color = "orange",
+    size = 2
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_cl,
+    y = monash_lat_cl,
+    label = "Clayton",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "red"
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_caul,
+    y = monash_lat_caul,
+    label = "Caulfield",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "yellow"
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_pen,
+    y = monash_lat_pen,
+    label = "Peninsula",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "lightgreen"
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_park,
+    y = monash_lat_park,
+    label = "Parkville",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "orange"
+  ) +
   theme_minimal() +
   theme(legend.position = "bottom")
-
 ```
+
+The @fig-ses-sa3 illustrates socio-economic disparities across Victoria, with darker shades indicating advantaged regions and lighter shades highlighting disadvantaged areas. Monash University's main campuses, such as Caulfield and Clayton, are surrounded by darker, advantaged areas, suggesting that students nearby likely have better access to resources and educational opportunities. In contrast, the lighter-shaded regions, particularly in the northern, western and outer areas, represent socio-economically disadvantaged regions where students face more barriers to higher education, such as limited resources and financial challenges. This visual insight suggests that Monash could focus outreach, scholarships, and support programs in these lighter regions to increase participation from low SES backgrounds. Additionally, strategic planning could involve expanding facilities/campuses or forming partnerships in low SES areas to reduce geographical and socio-economic barriers, aligning with Monash's objective of fostering a more equitable education system across Victoria.
 
 ## Map of SA3 regions in central victoria (zoomed-in) with the year 12 population projections for 2030
 
-```{r}
+```{r sa3-zoom}
+#| label: fig-ses-sa3-zoom
+#| fig-cap: Projected Year 12 Population in SA3 Regions of Victoria for 2030
 # Processing for the Map
-
-sa3_ses30<- vicdata_map |> 
-  filter(Percentile_Category == 1) |>      
-  group_by(SA3_NAME21) |>        
-  summarise(Sum_Year_2030_low_ses = sum(Year_2030, na.rm = TRUE)) |> 
-  ungroup()  |> 
-  right_join(vicdata_map |> 
-               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
-  mutate(Sum_Year_2030_low_ses = ifelse(is.na(Sum_Year_2030_low_ses), 0, Sum_Year_2030_low_ses))  |> 
+sa3_ses30 <- vicdata_map |>
+  filter(Percentile_Category == 1) |>
+  group_by(SA3_NAME21) |>
+  summarise(Sum_Year_2030_low_ses = sum(Year_2030, na.rm = TRUE)) |>
+  ungroup()  |>
+  right_join(vicdata_map |>
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>
+  mutate(Sum_Year_2030_low_ses = ifelse(is.na(Sum_Year_2030_low_ses), 0, Sum_Year_2030_low_ses))  |>
   rename(SA3_NAME_2021 = SA3_NAME21)
 
-sa3_total_30 <- vicdata_map |>     
-  group_by(SA3_NAME21) |>        
-  summarise(Sum_Year_2030 = sum(Year_2030, na.rm = TRUE)) |> 
-  ungroup()  |> 
-  right_join(vicdata_map |> 
-               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
-  mutate(Sum_Year_2030 = ifelse(is.na(Sum_Year_2030), 0, Sum_Year_2030))  |> 
+sa3_total_30 <- vicdata_map |>
+  group_by(SA3_NAME21) |>
+  summarise(Sum_Year_2030 = sum(Year_2030, na.rm = TRUE)) |>
+  ungroup()  |>
+  right_join(vicdata_map |>
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>
+  mutate(Sum_Year_2030 = ifelse(is.na(Sum_Year_2030), 0, Sum_Year_2030))  |>
   rename(SA3_NAME_2021 = SA3_NAME21)
 
-sa3_ses30_map <- merged_data_forsa3 |> 
-  left_join(sa3_ses30 |> 
-              tibble()|>
-              select(-geometry) 
-            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))|> 
-  left_join(sa3_total_30 |> 
-              tibble()|>
-              select(-geometry) 
-            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
+sa3_ses30_map <- merged_data_forsa3 |>
+  left_join(sa3_ses30 |>
+              tibble() |>
+              select(-geometry)
+            ,
+            by = c("SA3_NAME_2021" = "SA3_NAME_2021")) |>
+  left_join(sa3_total_30 |>
+              tibble() |>
+              select(-geometry)
+            ,
+            by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
 
 # Plotting the map
 
 ggplot(data = sa3_ses30_map) +
-  geom_sf(aes(fill = Sum_Year_2030, geometry = geometry)) +  
-  labs(title = "SA3 Regions in Victoria by Year 12 population in 2030",
-       subtitle = "Total Population",
-       caption = "Source: ABS & Custom Data",
-        x = "Latitude",  
-       y = "Longitude",
-       fill = "Population") +
-  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
-  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
-  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
-  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
-  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) + 
-  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
-  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
-  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
-  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
-           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
+  geom_sf(aes(fill = Sum_Year_2030, geometry = geometry)) +
+  labs(
+    title = "SA3 Regions in Victoria by Year 12 population in 2030",
+    subtitle = "Total Population",
+    caption = "Source: ABS & Custom Data",
+    x = "Latitude",
+    y = "Longitude",
+    fill = "Population"
+  ) +
+  coord_sf(
+    xlim = c(zoom_lon_min, zoom_lon_max),
+    ylim = c(zoom_lat_max, zoom_lat_min)
+  ) +
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl),
+             color = "red",
+             size = 2) +
+  geom_point(
+    aes(x = monash_lon_caul, y = monash_lat_caul),
+    color = "yellow",
+    size = 2
+  ) +
+  geom_point(
+    aes(x = monash_lon_pen, y = monash_lat_pen),
+    color = "lightgreen",
+    size = 2
+  ) +
+  geom_point(
+    aes(x = monash_lon_park, y = monash_lat_park),
+    color = "orange",
+    size = 2
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_cl,
+    y = monash_lat_cl,
+    label = "Clayton",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "red"
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_caul,
+    y = monash_lat_caul,
+    label = "Caulfield",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "yellow"
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_pen,
+    y = monash_lat_pen,
+    label = "Peninsula",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "lightgreen"
+  ) +
+  annotate(
+    "text",
+    x = monash_lon_park,
+    y = monash_lat_park,
+    label = "Parkville",
+    hjust = -0.2,
+    vjust = -0.5,
+    size = 3,
+    color = "orange"
+  ) +
   theme_minimal() +
-  theme(legend.position = "bottom") + 
+  theme(legend.position = "bottom") +
   guides(fill = guide_colorbar(barwidth = 15, barheight = 0.5)) 
 ```
 
+This @fig-ses-sa3-zoom displays the projected distribution of Year 12 graduates across Victoria's SA3 regions for 2030, with shading indicating population concentrations. Darker areas represent lower projected Year 12 populations, while lighter regions show higher numbers. Notably, the lighter shades, concentrated around Melbourne's metropolitan regions near Monash campuses such as Clayton and Peninsula, suggest a higher influx of potential university applicants in these areas. In contrast, the darker shaded areas, particularly the Melbourne CBD predict lower Year 12 populations.
 
 # Future work
 
+The study provides Monash University with a robust foundation to strategically expand its reach and better meet the government's Low SES enrollment targets. By using demographic forecasts and socio-economic data, Monash can make informed decisions on where to focus recruitment efforts, allocate resources, and develop targeted outreach programs. Future work could involve integrating this analysis with confidential VTAC data to gain deeper insights into student application trends and outcomes, allowing for a more refined approach to student support. Additionally, expanding geospatial analysis and engaging in scenario planning could help Monash explore how changes in policy or new initiatives might impact student demographics. This combined data-driven approach will empower Monash to optimize resource distribution, anticipate enrollment demands, and ultimately enhance its decision-making for future growth.
+
+
+
 # Conclusion
+
+This project set out to forecast the Year 12 graduate population in Victoria from 2021 to 2030, focusing on the socio-economic factors of the regions. Our aim was to provide Monash University with the insights needed to enhance participation for students from low socio-economic backgrounds, in line with the Australian government’s target of having 20% of university enrollments come from these regions. The findings from the analysis offered a comprehensive view of demographic trends across Victoria, highlighting opportunities and challenges for creating a more equitable education system.
+
+One of the most striking results was the steady increase in the Year 12 graduate population across Victoria, particularly in regions close to Monash’s key campuses. Areas like Melbourne’s South-East and Western suburbs are projected to see significant growth in university-ready students in or around 2030. These are critical for Monash, as they guide decisions about where to direct resources and how to support regions that might otherwise face a decline in university candidates. By leveraging SEIFA data for the SES status of the regions, the analysis pinpointed regions with the highest concentrations of Low SES students, suggesting a clear strategy for Monash to focus on outreach, scholarships, and academic support. This targeted approach will be crucial for fostering an inclusive academic environment.
+
+The study also has significant policy implications. Monash University can use these findings to make informed decisions on campus expansion, outreach efforts, and the allocation of scholarships. Understanding demographic trends and the socio-economic challenges associated with them allows for strategic planning that is both evidence-based and effective. This data can help Monash develop initiatives to reach low SES regions and boost Low SES enrollments, contributing to a fairer and more equitable education system. Expanding campus facilities, partnering with local schools, and offering flexible learning options are some practical ways to address the educational needs of these disadvantaged regions.
+
+The study, however, is not without limitations. The projections depend on stable demographic trends, assuming that factors like birth rates and migration will remain consistent over the forecast period. In reality, unexpected shifts—such as economic changes or global events—could alter these predictions. Moreover, the socio-economic data was based on the 2021 Census, which might not fully capture recent changes in the socio-economic landscape. Updating the analysis with more recent and localized data in the future would offer a more accurate and current understanding. Additionally, this study focused solely on Victoria, so expanding the analysis to include comparisons with other states could provide a broader perspective on educational inequalities across Australia.
+
+Despite these limitations, the project offers a solid foundation for Monash University to understand and address educational barriers. By forecasting Year 12 graduate numbers and mapping socio-economic factors, it provides a data-driven framework for meeting government targets and supporting students from disadvantaged backgrounds. The study opens the door for further research, including more detailed analyses that integrate additional data sources like VTAC application trends, and broader geographical comparisons. This kind of continued analysis will help refine and strengthen Monash’s strategies for supporting an inclusive educational environment, ensuring that students from all backgrounds have the opportunity to succeed. 
+
+The work done here lays the groundwork for a fairer future in education, one where strategic, data-informed decisions can directly impact the lives of students from all socio-economic backgrounds. With a focus on evidence-based policy and practical interventions, Monash is well-positioned to lead the way in fostering greater access to higher education across Victoria and beyond.

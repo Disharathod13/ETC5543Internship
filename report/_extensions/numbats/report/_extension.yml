@@ -40,3 +40,5 @@ contributes:
         - EQUIS.png
         - AMBA.png
         - AACSB.png
+      header-includes:
+        - \floatplacement{table}{H}
