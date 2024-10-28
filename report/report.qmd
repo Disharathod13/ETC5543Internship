@@ -362,14 +362,25 @@ These tools and packages were critical to our workflow, providing the functional
 ## The line graph for the projections made for Year 12 population in Victoria
 
 ```{r}
-ggplot(thetable, aes(x = Year, y = Total_Value, group = 1)) +  
-  geom_line(color = "blue", size = 1) + 
-  geom_point(color = "red", size = 2) +  
-  labs(title = "The Trend for Year 12 Population",
-       x = "Year",
-       y = "Total Population") +
+#|label: fig-year-trend
+#|fig-cap: The Trend for Year 12 Population
+ggplot(thetable, aes(x = Year, y = Total_Value, group = 1)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "red", size = 2) +
+  labs(title = "The Trend for Year 12 Population", x = "Year", y = "Total Population") +
   theme_minimal()
 ```
+
+As shown in @fig-year-trend, the Year 12 population trend illustrates...
+the projected Year 12 graduate population in Victoria from 2021 to 2030. The x-axis represents the years, ranging from 2021 to 2030, while the y-axis indicates the total projected population of Year 12 graduates.
+
+**Analysis of the Graph:**
+The trend line, marked in blue, showcases a general upward trend in the Year 12 population over the decade. From 2021 to 2023, there is a relatively modest increase in the population, suggesting steady growth. After 2025, the graph shows a continued but steadier incline, suggesting sustained growth in the Year 12 population until 2030, mostly at a slightly slower rate. The red dots on the graph indicate specific data points for each year, emphasizing the consistency of the growth pattern over time. The visual clearly points out that by 2030, the Year 12 graduate population is expected to be substantially higher than the preceeding years, reflecting a positive trend in education completion rates.
+
+**Relation to Project Objectives:**
+This projection is directly tied to the core objectives of the project, which aims to assess and project the Year 12 population trends in Victoria, with a particular focus on students from Low Socio-Economic Status (SES) backgrounds. The increasing trend seen in the graph suggests a growth of potential university candidates, making it crucial to understand which regions might face challenges in accessing higher education due to socio-economic barriers.
+
+The projection helps inform strategic planning, allowing targeted outreach efforts, resource allocation, and policy adjustments to ensure that educational opportunities are equitably distributed, particularly for disadvantaged groups. This aligns with the goal of enhancing access for Low SES students and meeting the government's target for increased university participation from these backgrounds.
 
 
 ## The projection of the population values forecasted for each SA4 region in Victoria 
@@ -388,23 +399,32 @@ ggplot(summarized_data, aes(x = Year, y = Total_Value)) +
   theme_minimal() +
   facet_wrap(~ SA4_NAME_2021, scales = "free_y")
 ```
+The graph displays the projected Year 12 graduate population from 2021 to 2030 across various SA4 regions in Victoria. Each subplot represents a different region, allowing us to visualize how the Year 12-ready population is expected to evolve over the decade. The x-axis indicates the years from 2021 to 2030, while the y-axis shows the projected population values. The solid line in each subplot connects the data points year by year, providing a clear trend for each region.
 
+**Analysis of the Graph:**
+The projections vary significantly across regions, reflecting diverse local population trends. For instance, regions like Melbourne - South East and Melbourne - West show a consistent upward trend, indicating steady growth in the Year 12 population(which are the areas closer to Monash campuses). These areas are likely to see an increasing number of graduates over the next decade. In contrast, regions such as Melbourne - Inner East and Shepparton exhibit a peak followed by a decline, suggesting that the Year 12 population might decrease after hitting a peak around the mid-2020s.
+
+**Relation to Project Objectives:**
+The graph directly aligns with the project's objectives of understanding Year 12 demographic trends in Victoria. By breaking down projections by SA4 regions, the graph enables Monash University to pinpoint which areas might face higher educational demand and where interventions may be necessary. For regions showing strong growth, strategic planning can involve increasing outreach, resources, or infrastructure to accommodate more students. Conversely, regions showing potential declines may benefit from retention strategies or targeted programs to ensure students remain engaged and are encouraged to complete Year 12.
 
 ## Trend for each Percentile Category in every SA4 region in Victoria (Red = LowSES)
 
 ```{r}
 ggplot(vicdata_sum, aes(x = Year, y = Sum_Value, color = factor(Percentile_Category))) +
    geom_line() +
-   facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
-   scale_x_continuous(breaks = seq(2021, 2030, 1)) +
-   labs(title = "Population by Year for SA4 Region in VIC",
-        x = "Year",
-        y = "Population",
-        color = "Percentile Category") +
+facet_wrap(~ SA4_NAME_2021, scales = "free_y") +
+ scale_x_continuous(breaks = seq(2021, 2030, 1)) +
+  labs(title = "Population by Year for SA4 Region in VIC",
+         x = "Year",
+         y = "Population",
+color = "Percentile Category") +
    theme_minimal() +
    theme(axis.text.x = element_text(angle = 45, hjust = 1))
  
 ```
+The third graph illustrates the projected Year 12 population trends across various SA4 regions in Victoria, broken down by socio-economic percentile categories. Each line color corresponds to a different SES group, with the red line representing the lowest socio-economic status (most disadvantaged) and the purple line indicating the highest socio-economic status (most advantaged). Green and blue lines depict the middle-low and middle-high SES groups, respectively.
+
+The Melbourne North-west (closer to our campuses) and North West have an upwqard trend line for Low SES population for year 12, that can help us make further decisions. 
 
 
 ## Tha SES map of 2021 (Socio Economic status of regions in central part of Victoria for SA3)
@@ -544,6 +564,69 @@ ggplot(data = sa3_ses21_map) +
   theme(legend.position = "bottom")
 
 ```
+
+## Map of SA3 regions in central victoria (zoomed-in) with the year 12 population projections for 2030
+
+```{r}
+# Processing for the Map
+
+sa3_ses30<- vicdata_map |> 
+  filter(Percentile_Category == 1) |>      
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2030_low_ses = sum(Year_2030, na.rm = TRUE)) |> 
+  ungroup()  |> 
+  right_join(vicdata_map |> 
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+  mutate(Sum_Year_2030_low_ses = ifelse(is.na(Sum_Year_2030_low_ses), 0, Sum_Year_2030_low_ses))  |> 
+  rename(SA3_NAME_2021 = SA3_NAME21)
+
+sa3_total_30 <- vicdata_map |>     
+  group_by(SA3_NAME21) |>        
+  summarise(Sum_Year_2030 = sum(Year_2030, na.rm = TRUE)) |> 
+  ungroup()  |> 
+  right_join(vicdata_map |> 
+               distinct(SA3_NAME21), by = "SA3_NAME21") |>  
+  mutate(Sum_Year_2030 = ifelse(is.na(Sum_Year_2030), 0, Sum_Year_2030))  |> 
+  rename(SA3_NAME_2021 = SA3_NAME21)
+
+sa3_ses30_map <- merged_data_forsa3 |> 
+  left_join(sa3_ses30 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))|> 
+  left_join(sa3_total_30 |> 
+              tibble()|>
+              select(-geometry) 
+            , by = c("SA3_NAME_2021" = "SA3_NAME_2021"))
+
+# Plotting the map
+
+ggplot(data = sa3_ses30_map) +
+  geom_sf(aes(fill = Sum_Year_2030, geometry = geometry)) +  
+  labs(title = "SA3 Regions in Victoria by Year 12 population in 2030",
+       subtitle = "Total Population",
+       caption = "Source: ABS & Custom Data",
+        x = "Latitude",  
+       y = "Longitude",
+       fill = "Population") +
+  coord_sf(xlim = c(zoom_lon_min, zoom_lon_max), ylim = c(zoom_lat_max, zoom_lat_min)) + 
+  geom_point(aes(x = monash_lon_cl, y = monash_lat_cl), color = "red", size = 2) + 
+  geom_point(aes(x = monash_lon_caul, y = monash_lat_caul), color = "yellow", size = 2) +
+  geom_point(aes(x = monash_lon_pen, y = monash_lat_pen), color = "lightgreen", size = 2) +
+  geom_point(aes(x = monash_lon_park, y = monash_lat_park), color = "orange", size = 2) + 
+  annotate("text", x = monash_lon_cl, y = monash_lat_cl, label = "Clayton", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "red") +
+  annotate("text", x = monash_lon_caul, y = monash_lat_caul, label = "Caulfield", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "yellow") +
+  annotate("text", x = monash_lon_pen, y = monash_lat_pen, label = "Peninsula", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "lightgreen") +
+  annotate("text", x = monash_lon_park, y = monash_lat_park, label = "Parkville", 
+           hjust = -0.2, vjust = -0.5, size = 3, color = "orange") +
+  theme_minimal() +
+  theme(legend.position = "bottom") + 
+  guides(fill = guide_colorbar(barwidth = 15, barheight = 0.5)) 
+```
+
 
 # Future work
 
